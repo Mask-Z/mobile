@@ -375,7 +375,7 @@
 
 
             if (!flag) {
-                alert( $("#srf_js_tooltips").text());
+                alert($("#srf_js_tooltips").text());
 //                $("#srf_js_tooltips").css('display', 'block');
                 setTimeout(function () {
                     $("#srf_js_tooltips").css('display', 'none');
@@ -495,22 +495,24 @@
         //新增/修改联合受让方保存
         $("#btn_ok").click(function () {
             var flag = true;
-            var text='';
+            var text = '';
             if (zhuanRangType == "1" && $("#shouRang_percent").val() > 100) {
-                text='受让比例请输入不大于100的值';
+                text = '受让比例请输入不大于100的值';
                 flag = false;
             }
 
             if (zhuanRangType == "1" && $("#shouRang_percent").val() == "") {
-                text='受让比例必填';
+                text = '受让比例必填';
                 flag = false;
             }
             if (zhuanRangType == "2" && $("#shouRang_gufen").val() == "") {
-                text='受让股份必填';
+                text = '受让股份必填';
                 flag = false;
             }
-            if ($.trim($("#shouRang_name").val()) == "") {
-                text='受让方名称必填';
+
+            if($.trim($("#shouRangFang_name").combogrid('getValue')) == ""){
+//            if ($.trim($("#shouRang_name").val()) == "") {
+                text = '受让方名称必填';
                 flag = false;
             }
             if (!flag) {
@@ -541,6 +543,7 @@
                 }
             });
             $('#union_select_div').panel('close');
+            $("#lhsrf").datagrid('reload');
             $("#pj_gq_submit").show();
         });
 
@@ -1007,7 +1010,7 @@
                 <label class="label-top">经营范围<font color="red">(*)</font>:</label>
                 <input class="easyui-textbox" style="width:50%;" data-options="required:true"
                        name="info['JingYingFanWei']"
-                       type="text" id="jingyingfanwei" value="${data.JingYingFanWei }" placeholder="请输入经营范围" >
+                       type="text" id="jingyingfanwei" value="${data.JingYingFanWei }" placeholder="请输入经营范围">
             </div>
             <div style="margin-bottom:20px">
                 <label class="label-top">受让资格陈述:</label>
@@ -1029,7 +1032,7 @@
             </div>
             <div style="margin-bottom:20px">
                 <label class="label-top" style="width:100%; display:block;">报表日期:</label>
-                <input type="text" class="easyui-datebox" name="info['BaoBiaoDate']" value="<%=bbdate %>" >
+                <input type="text" class="easyui-datebox" name="info['BaoBiaoDate']" value="<%=bbdate %>">
             </div>
 
             <div style="margin-bottom:20px">
@@ -1153,9 +1156,9 @@
         </div>
 
         <table class="easyui-datagrid" title="联合受让方" style="width:1000px;height:350px"
-               <%--data-options="singleSelect:true,url:'example/datagrid/datagrid_data1.json',method:'get',toolbar:'#tb',footer:'#ft',pagination:true,--%>
+        <%--data-options="singleSelect:true,url:'example/datagrid/datagrid_data1.json',method:'get',toolbar:'#tb',footer:'#ft',pagination:true,--%>
                data-options="singleSelect:true,url:'pj_gq_getUnionListToEasyui?baoMingGuid=${data.RowGuid }',method:'get',toolbar:'#tb',footer:'#ft',pagination:true,
-				pageSize:10">
+				pageSize:10" id="lhsrf">
             <thead>
             <tr>
                 <th data-options="field:'id',width:100">序号</th>
@@ -1166,8 +1169,8 @@
         </table>
         <div id="ft" style="padding:2px 5px;">
             <a class="easyui-linkbutton" iconCls="icon-add" plain="true" id="btn_add">添加</a>
-            <a  class="easyui-linkbutton" iconCls="icon-edit" plain="true">编辑</a>
-            <a  class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
+            <a class="easyui-linkbutton" iconCls="icon-edit" plain="true">编辑</a>
+            <a class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
         </div>
         <br>
         <p>相关附件</p>
@@ -1184,12 +1187,12 @@
                         <%--<label class="label-top" style="width:100%; display:block;">文件管理:</label>--%>
 
 
-                            <form id="upform">
-                                <input name="fileCode" id="fileCode" type="hidden">
-                                <input name="rowGuid" type="hidden" value="${data.RowGuid }">
-                                <input class="easyui-filebox" style="width:300px" id="uploaderInput" name="file"
-                                       data-options="buttonIcon:'icon-folder-search',buttonText:''" name="file_div">
-                            </form>
+                    <form id="upform">
+                        <input name="fileCode" id="fileCode" type="hidden">
+                        <input name="rowGuid" type="hidden" value="${data.RowGuid }">
+                        <input class="easyui-filebox" style="width:300px" id="uploaderInput" name="file"
+                               data-options="buttonIcon:'icon-folder-search',buttonText:''" name="file_div">
+                    </form>
                 </div>
             </div>
         </c:forEach>
@@ -1197,7 +1200,7 @@
         <!--报名表单End-->
 
         <div>
-            <a  class="easyui-linkbutton" iconCls="icon-ok" style="width:100%;height:32px" id="btn_save">确定</a>
+            <a class="easyui-linkbutton" iconCls="icon-ok" style="width:100%;height:32px" id="btn_save">确定</a>
         </div>
 
         <div id="w1" style="background:url('<%=basePath%>images/bg-header.png?07a751e') repeat-x scroll 0 0 #FFFFFF;">
@@ -1207,12 +1210,12 @@
 
 <!--新增联合受让方dialog start-->
 <style>
-    .xzlhsrf{
+    .xzlhsrf {
         width: 100%;
         border-radius: 0px;
         top: 0px;
         left: 30%;
-        -webkit-transform: translate(0,0);
+        -webkit-transform: translate(0, 0);
         transform: translate(0, 0);
         height: 100%;
         max-width: 500px;
@@ -1221,119 +1224,153 @@
         z-index: 99;
     }
 </style>
-<h4 class="easyui-panel xzlhsrf" title="新增联合受让方" id="union_select_div" closed='true' >
-<%--<div class="" id="union_select_div" style="display: none;">--%>
-<div class="weui-mask"></div>
-<div class="" style="height:100%;overflow-y:scroll;">
-<%--<div class="weui-dialog__hd_srf" style="height: 30px;      padding: 10px;  background: #f5f5f5;line-height: 30px;border-bottom: 1px #ddd solid;"><strong class="weui-dialog__title">新增联合受让方</strong></div>--%>
-<div class="weui-dialog__bd_srf">
-<form id="pj_gq_addUnion">
+<h4 class="easyui-panel xzlhsrf" title="新增联合受让方" id="union_select_div" closed='true'>
+    <%--<div class="" id="union_select_div" style="display: none;">--%>
+    <div class="weui-mask"></div>
+    <div class="" style="height:100%;overflow-y:scroll;">
+        <%--<div class="weui-dialog__hd_srf" style="height: 30px;      padding: 10px;  background: #f5f5f5;line-height: 30px;border-bottom: 1px #ddd solid;"><strong class="weui-dialog__title">新增联合受让方</strong></div>--%>
+        <div class="weui-dialog__bd_srf">
+            <form id="pj_gq_addUnion">
 
-<input type="hidden" id="union_baoMing_guid" name="info['baoMingGuid']" value="${data.RowGuid }"><!-- 联合受让方报名统一标识 -->
-<input type="hidden" id="shouRang_guid" name="info['shouRangGuid']" value="">
-<input type="hidden" id="union_row_guid" name="info['rowGuid']" value=""><!-- 联合受让方唯一标识 -->
-<input type="hidden" name="info['zhuanRangType']" value="${data.ZhuanRangType }"><!-- 转让方式 -->
-<input type="hidden" name="info['unionType']" id="union_type" value=""><!-- 转让方式 -->
+                <input type="hidden" id="union_baoMing_guid" name="info['baoMingGuid']" value="${data.RowGuid }">
+                <!-- 联合受让方报名统一标识 -->
+                <input type="hidden" id="shouRang_guid" name="info['shouRangGuid']" value="">
+                <input type="hidden" id="union_row_guid" name="info['rowGuid']" value=""><!-- 联合受让方唯一标识 -->
+                <input type="hidden" name="info['zhuanRangType']" value="${data.ZhuanRangType }"><!-- 转让方式 -->
+                <input type="hidden" name="info['unionType']" id="union_type" value=""><!-- 转让方式 -->
 
 
-<div style="margin-bottom:20px" id="pj_sign_srf">
-<div style="margin-bottom:20px">
-<label class="label-top">受让方名称<font color="red">(*)</font>:</label>
-<input class="easyui-textbox" style="width:50%;display: block;" data-options="required:true" name="info['shouRangName']" id="shouRang_name"
-type="text"  value="">
-</div>
-<div class="weui-cell__ft" style="font-size: 0">
-<span></span>
-</div>
-</div>
+             <!--   <div style="margin-bottom:20px" id="pj_sign_srf">
+                    <div style="margin-bottom:20px">
+                        <label class="label-top">受让方名称<font color="red">(*)</font>:</label>
+                        <input class="easyui-textbox" style="width:50%;display: block;" data-options="required:true"
+                               name="info['shouRangName']" id="shouRang_name"
+                               type="text" value="">
+                    </div>
+                    <div class="weui-cell__ft" style="font-size: 0">
+                        <span></span>
+                    </div>
+                </div> -->
 
-<div style="margin-bottom:20px">
-<label class="label-top" style="width:100%; display:block;">受让方类型:</label>
-<select class="easyui-combobox"  labelPosition="top" style="width:50%;display: block;" name="info['shouRangRenType']" id="shouRangRen_type" >
-<option value="1">法人</option>
-<option value="2">自然人</option>
-</select>
-</div>
+                <div style="margin-bottom:20px">
+                    <label class="label-top">受让方名称<font color="red">(*)</font>:</label>
+                    <select class="easyui-combogrid" style="width:100%" data-options="
+                    panelWidth: 600,
+                    idField: 'danWeiName',
+                    textField: 'danWeiName',
+                    url: 'get_srf_listToEasyui',
+                    method: 'get',
+                    columns: [[
+                        {field:'id',title:'序号',width:120},
+                        {field:'unitOrgNum',title:'组织机构代码',width:160},
+                        {field:'danWeiName',title:'竞买方',width:120,align:'right'}
+                    ]],
+                    fitColumns: true
+                ,required:true"  name="info['shouRangName']" id="shouRangFang_name">
+                    </select>
+                </div>
 
-<div style="margin-bottom:20px" id="shouRang_percent_div">
-<label class="label-top">受让比例(%)<font color="red">(*)</font>:</label>
-<input class="easyui-textbox" style="width:50%;display: block;" data-options="required:true" name="info['shouRangPercent']" id="shouRang_percent"
-type="number"  value="" placeholder="请输入受让比例">
-</div>
+                <div style="margin-bottom:20px">
+                    <label class="label-top" style="width:100%; display:block;">受让方类型:</label>
+                    <select class="easyui-combobox" labelPosition="top" style="width:50%;display: block;"
+                            name="info['shouRangRenType']" id="shouRangRen_type">
+                        <option value="1">法人</option>
+                        <option value="2">自然人</option>
+                    </select>
+                </div>
 
-<div style="margin-bottom:20px" id="shouRang_gufen_div">
-<label class="label-top">受让股份(股)<font color="red">(*)</font>:</label>
-<input class="easyui-textbox" style="width:50%;display: block;" data-options="required:true" name="info['shouRangGuFen']" id="shouRang_gufen"
-type="number"  value="" >
-</div>
+                <div style="margin-bottom:20px" id="shouRang_percent_div">
+                    <label class="label-top">受让比例(%)<font color="red">(*)</font>:</label>
+                    <input class="easyui-textbox" style="width:50%;display: block;" data-options="required:true"
+                           name="info['shouRangPercent']" id="shouRang_percent"
+                           type="number" value="" placeholder="请输入受让比例">
+                </div>
 
-<div style="margin-bottom:20px">
-<label class="label-top">联系人姓名:</label>
-<input class="easyui-textbox" style="width:50%;display: block;"  name="info['lianXiName']" id="lianXi_name" type="text"  value="" >
-</div>
+                <div style="margin-bottom:20px" id="shouRang_gufen_div">
+                    <label class="label-top">受让股份(股)<font color="red">(*)</font>:</label>
+                    <input class="easyui-textbox" style="width:50%;display: block;" data-options="required:true"
+                           name="info['shouRangGuFen']" id="shouRang_gufen"
+                           type="number" value="">
+                </div>
 
-<div style="margin-bottom:20px">
-<label class="label-top">联系人电话:</label>
-<input class="easyui-textbox" style="width:50%;display: block;"  name="info['lianXiTel']" type="text" id="lianXi_tel" value="" >
-</div>
+                <div style="margin-bottom:20px">
+                    <label class="label-top">联系人姓名:</label>
+                    <input class="easyui-textbox" style="width:50%;display: block;" name="info['lianXiName']"
+                           id="lianXi_name" type="text" value="">
+                </div>
 
-<div style="margin-bottom:20px">
-<label class="label-top">联系人邮件:</label>
-<input class="easyui-textbox" style="width:50%;display: block;"  name="info['lianXiEmail']" type="text"  id="lianXi_email"   value="" >
-</div>
+                <div style="margin-bottom:20px">
+                    <label class="label-top">联系人电话:</label>
+                    <input class="easyui-textbox" style="width:50%;display: block;" name="info['lianXiTel']" type="text"
+                           id="lianXi_tel" value="">
+                </div>
 
-<div style="margin-bottom:20px">
-<label class="label-top">联系人传真:</label>
-<input class="easyui-textbox" style="width:50%;display: block;"  name="info['lianXiFax']" type="text"  id="lianXi_fax" value="" >
-</div>
+                <div style="margin-bottom:20px">
+                    <label class="label-top">联系人邮件:</label>
+                    <input class="easyui-textbox" style="width:50%;display: block;" name="info['lianXiEmail']"
+                           type="text" id="lianXi_email" value="">
+                </div>
 
-<div style="margin-bottom:20px">
-<label class="label-top">委托会员单位名称:</label>
-<input class="easyui-textbox" style="width:50%;display: block;"  name="info['weiTuoDWName']" type="text" id="weiTuoDW_name" value="" >
-</div>
+                <div style="margin-bottom:20px">
+                    <label class="label-top">联系人传真:</label>
+                    <input class="easyui-textbox" style="width:50%;display: block;" name="info['lianXiFax']" type="text"
+                           id="lianXi_fax" value="">
+                </div>
 
-<div style="margin-bottom:20px">
-<label class="label-top">委托会员联系人电话:</label>
-<input class="easyui-textbox" style="width:50%;display: block;"  name="info['weiTuoDWLianXiTel']" type="text" id="weiTuoDW_lianXiTel"  value="" >
-</div>
+                <div style="margin-bottom:20px">
+                    <label class="label-top">委托会员单位名称:</label>
+                    <input class="easyui-textbox" style="width:50%;display: block;" name="info['weiTuoDWName']"
+                           type="text" id="weiTuoDW_name" value="">
+                </div>
 
-<div style="margin-bottom:20px">
-<label class="label-top">委托会员核实意见:</label>
-<input class="easyui-textbox" style="width:50%;display: block; height:80px;" data-options="multiline:true" id="weiTuoHY_heShi"
-name="info['weiTuoHYHeShi']" >
-</div>
+                <div style="margin-bottom:20px">
+                    <label class="label-top">委托会员联系人电话:</label>
+                    <input class="easyui-textbox" style="width:50%;display: block;" name="info['weiTuoDWLianXiTel']"
+                           type="text" id="weiTuoDW_lianXiTel" value="">
+                </div>
 
-<div style="margin-bottom:20px">
-<label class="label-top">委托会员工位号:</label>
-<input class="easyui-textbox" style="width:50%;display: block;"  name="info['weiTuoHYNo']" type="text"  id="weiTuoHY_No" value="" >
-</div>
+                <div style="margin-bottom:20px">
+                    <label class="label-top">委托会员核实意见:</label>
+                    <input class="easyui-textbox" style="width:50%;display: block; height:80px;"
+                           data-options="multiline:true" id="weiTuoHY_heShi"
+                           name="info['weiTuoHYHeShi']">
+                </div>
 
-<div style="margin-bottom:20px">
-<label class="label-top">委托会员经纪人:</label>
-<input class="easyui-textbox" style="width:50%;display: block;"  name="info['weiTuoHYName']"  id="weiTuoHY_name" type="text"  value="" >
-</div>
+                <div style="margin-bottom:20px">
+                    <label class="label-top">委托会员工位号:</label>
+                    <input class="easyui-textbox" style="width:50%;display: block;" name="info['weiTuoHYNo']"
+                           type="text" id="weiTuoHY_No" value="">
+                </div>
 
-<div style="margin-bottom:20px">
-<label class="label-top">委托会员经纪人编码:</label>
-<input class="easyui-textbox" style="width:50%;display: block;"  name="info['weiTuoHYCode']" type="text" id="weiTuoHY_code"  value="" >
-</div>
+                <div style="margin-bottom:20px">
+                    <label class="label-top">委托会员经纪人:</label>
+                    <input class="easyui-textbox" style="width:50%;display: block;" name="info['weiTuoHYName']"
+                           id="weiTuoHY_name" type="text" value="">
+                </div>
 
-<div style="margin-bottom:20px">
-<label class="label-top">委托会员联系人:</label>
-<input class="easyui-textbox" style="width:50%;display: block;"  name="info['weiTuoHYLianXiName']" id="weiTuoHY_lianXiName" type="text"  value="" >
-</div>
-</form>
-</div>
-<div class="weui-btn-area clearfix">
-    <%--<div>--%>
-        <%--<a  class="easyui-linkbutton" iconCls="icon-ok" style="width:20%;height:32px" id="btn_cancel">取消</a>--%>
-        <%--<a  class="easyui-linkbutton" iconCls="icon-ok" style="width:20%;height:32px" id="btn_ok">确定</a>--%>
+                <div style="margin-bottom:20px">
+                    <label class="label-top">委托会员经纪人编码:</label>
+                    <input class="easyui-textbox" style="width:50%;display: block;" name="info['weiTuoHYCode']"
+                           type="text" id="weiTuoHY_code" value="">
+                </div>
+
+                <div style="margin-bottom:20px">
+                    <label class="label-top">委托会员联系人:</label>
+                    <input class="easyui-textbox" style="width:50%;display: block;" name="info['weiTuoHYLianXiName']"
+                           id="weiTuoHY_lianXiName" type="text" value="">
+                </div>
+            </form>
+        </div>
+        <div class="weui-btn-area clearfix">
+            <%--<div>--%>
+            <%--<a  class="easyui-linkbutton" iconCls="icon-ok" style="width:20%;height:32px" id="btn_cancel">取消</a>--%>
+            <%--<a  class="easyui-linkbutton" iconCls="icon-ok" style="width:20%;height:32px" id="btn_ok">确定</a>--%>
+            <%--</div>--%>
+            <a class="weui-btn weui-btn_default" href="javascript:" id="btn_cancel">取消</a>
+            <a class="weui-btn weui-btn_primary" href="javascript:" id="btn_ok">确定</a>
+        </div>
+    </div>
     <%--</div>--%>
-<a class="weui-btn weui-btn_default" href="javascript:" id="btn_cancel">取消</a>
-<a class="weui-btn weui-btn_primary" href="javascript:" id="btn_ok">确定</a>
-</div>
-</div>
-<%--</div>--%>
 </h4>
 <!--新增联合受让方dialog end-->
 </body>

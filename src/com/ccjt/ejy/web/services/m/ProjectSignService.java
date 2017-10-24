@@ -654,6 +654,23 @@ public class ProjectSignService {
 		return srfList;
 	}
 
+	public Map<String, Object> getSrfListToEasyui() {
+		Map<String, Object> m = new HashMap<>();
+		List<SRF> list=null;
+			String sql = "select row_number() over (order by Row_ID  ) as id, isnull(UnitOrgNum,'') as UnitOrgNum,DanWeiName,DanWeiGuid from VIEW_HuiYuan_AllJingJiaDW where AuditStatus = '3' and StatusCode = '2' ";
+
+			try {
+				m.put("total", jdbc.getCount(sql));
+				sql+="order by Row_ID asc";
+				list = jdbc.beanList(sql,SRF.class);
+				m.put("rows", list);
+			} catch (Exception e) {
+				log.error("获取联合受让方列表数据出错: ", e);
+			}
+
+		return m;
+	}
+
 	public List<Map<String, Object>> getUnionList(String baoMingGuid) {
 		List<Map<String, Object>> unionList = null;
 		if (StringUtils.isNotEmpty(baoMingGuid)) {

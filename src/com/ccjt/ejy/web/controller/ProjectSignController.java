@@ -609,6 +609,16 @@ public class ProjectSignController {
 	}
 
 	/**
+	 * 获取竞买方列表(用于easyui)
+	 */
+	@RequestMapping("get_srf_listToEasyui")
+	@ResponseBody
+	public Object get_srf_listToEasyui() {
+		ProjectSignService pss = new ProjectSignService();
+		return JSON.toJSON(pss.getSrfListToEasyui());
+	}
+
+	/**
 	 * 股权报名根据baoMingGuid获取联合受让方
 	 */
 	@RequestMapping("pj_gq_getUnionList")
