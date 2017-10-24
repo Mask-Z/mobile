@@ -1,0 +1,43 @@
+@charset "utf-8";
+body,td,th {font-size:12px;color:#333;font-family: Arial,Tahoma, Geneva, sans-serif;}
+body, p, form, ul, li, dl, dt, dd, h1, h2, h3, h4, h5, h6 { padding:0; margin:0; }
+.clear { font-size:0; width:0; height:0; clear:both; overflow:hidden;}
+img { border:0; }
+a { color:#333; text-decoration:none; }
+html a:hover { text-decoration:underline; color:#f33100; }
+a:focus { outline: none; }
+img { border:none; }
+ul, li { list-style:none; }
+body, html { width:100%; height:100%; }
+.base-table{ border-left:1px #ddd solid;border-top:1px #ddd solid;}
+.base-table tr th{ border-right:1px #ddd solid;border-bottom:1px #ddd solid; padding:5px;font-weight:blod;}
+.base-table tr td{ border-right:1px #ddd solid;border-bottom:1px #ddd solid; padding:5px;}
+.base-list{ width:100%;}
+.base-list dl{ width:100%; float:left; clear:both; position:relative; border-bottom:1px #ddd solid;}
+.base-list dl dt{ width:150px; position:absolute; left:0px;text-align:right; }
+.base-list dl dt span{font-size:13px; padding-top:5px;float: right;}
+.base-list dl dd{ float:left; margin-left:160px;border-left:1px #ddd solid; padding-left:10px; min-height:25px;}
+.base-list dl dd .ej_1{ padding:0px 10px;float:left; border-right:1px #ddd solid; font-size:12px; margin:5px 0px;}
+.base-list dl dd .ej_1:last-child{ border-right:0px ;}
+.base-list dl:last-child{border-bottom:0px;}
+.base-list dl dd .ej_1 input{ vertical-align:middle;}
+
+
+/*横版表格*/
+.tbskin1{argin:0 auto; border:0; border-collapse:collapse; border:1px solid #ccc; width:100%;}
+.tbskin1 th{border:1px solid #eee; background:#F0F6F8; padding:4px 4px;}
+.tbskin1 td{border:1px solid #eee; color:#333; text-align:center; padding:2px 4px; background:#fff;}
+/*竖版表格*/
+.tbskin2{argin:0 auto; border:0; border-collapse:collapse; border:1px solid #ccc; width:100%;}
+.tbskin2 th{border:1px solid #eee; background:#F0F6F8; padding:3px 5px 3px 2px; text-align:right;}
+.tbskin2 td{border:1px solid #eee; color:#333; padding:3px 2px 3px 5px; background:#fff;}
+/*查询条件*/
+.searchdiv{ overflow:hidden; zoom:1; padding:0;}
+.searchdiv dl{ float:left; margin:0; padding:0; }
+.searchdiv dl dt{ display:block; float:left; background:#eee; padding:6px 2px 5px 4px; border-right:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;}
+.searchdiv dl dd{ display:block; float:left; padding:2px 20px 2px 4px; border-right:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;}
+
+.addicon{ padding-left:20px; background:url(../images/add.gif) no-repeat; cursor:pointer;}
+.addicon：hover{ text-decoration:none; color:#3366CC}
+.delicon{ padding-left:20px; background:url(../images/del.gif) no-repeat; cursor:pointer;}
+.delicon：hover{ text-decoration:none; color:#3366CC}

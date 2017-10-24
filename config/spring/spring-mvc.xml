@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+ http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans.xsd
+ http://www.springframework.org/schema/mvc
+ http://www.springframework.org/schema/mvc/spring-mvc.xsd
+ http://www.springframework.org/schema/context
+ http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:component-scan base-package="com.ccjt.ejy.web.controller,com.ccjt.ejy.web.api" />
+
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<constructor-arg value="UTF-8" />
+			</bean>
+			<!-- 将Jackson2HttpMessageConverter的默认格式化输出设为true -->
+			<bean
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="objectMapper" ref="objectMapper"/>
+				<property name="prettyPrint" value="true" />
+
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	<mvc:default-servlet-handler />
+	
+	
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/pj_list_cqjy" />
+			<mvc:mapping path="/pj_list_data" />
+			<mvc:mapping path="/pj_sign_up" />
+			<mvc:mapping path="/pj_sign_up_view" />
+			<mvc:mapping path="/pj_gq_addUnion_submit" />
+			<mvc:mapping path="/get_srf_list" />
+
+			<mvc:mapping path="/getJMRProvisions"/>
+			<mvc:mapping path="/pj_gq_getUnionList" />
+			<mvc:mapping path="/pj_gq_delUnion" />
+			<mvc:mapping path="/pj_gq_getUnion" />
+			<mvc:mapping path="/pj_sign_up_submit" />
+			<mvc:mapping path="/pj_sign_up_audit" />
+			<mvc:mapping path="/getReceipt" />
+			<mvc:mapping path="/getUserInfo" />
+
+			<bean class="com.ccjt.ejy.web.commons.interceptor.LoginIntercepter" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	
+
+ 	<bean id="objectMapper" class="com.ccjt.ejy.web.commons.mapper.Jackson2ObjectMapper"/>
+
+	<bean
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionAttribute" value="exception"></property>
+		<property name="defaultErrorView" value="error" />
+		<property name="exceptionMappings">
+			<props>
+				<prop key="NOTLoginException">redirect:/login</prop>
+			</props>
+		</property>
+		
+	</bean>
+
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize">
+			<value>10485760</value>
+		</property>
+	</bean>
+
+</beans>

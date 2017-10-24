@@ -1,0 +1,173 @@
+/*
+JQuery EasyUI 1.5.x of Insdep Theme 1.0.0
+演示地址：https://www.insdep.com/example/
+下载地址：https://www.insdep.com
+问答地址：https://bbs.insdep.com
+
+项目地址：http://git.oschina.net/weavors/JQuery-EasyUI-1.5.x-Of-Insdep-Theme
+
+QQ交流群：184075694 （优先发布更新主题及内测包）
+*/
+
+/*空白*/
+.icon-blank{
+	background:url('icons/blank.gif') no-repeat center center;
+}
+/*绿色加号*/
+.icon-add{
+	background:url('icons/edit_add.png') no-repeat center center;
+}
+/*铅笔*/
+.icon-edit{
+	background:url('icons/pencil.png') no-repeat center center;
+}
+/*黑色叉叉*/
+.icon-clear{
+	background:url('icons/clear.png') no-repeat center center;
+}
+/*红色横线删除*/
+.icon-remove{
+	background:url('icons/edit_remove.png') no-repeat center center;
+}
+/*蓝色保存*/
+.icon-save{
+	background:url('icons/filesave.png') no-repeat center center;
+}
+/*剪刀*/
+.icon-cut{
+	background:url('icons/cut.png') no-repeat center center;
+}
+/*绿色勾*/
+.icon-ok{
+	background:url('icons/ok.png') no-repeat center center;
+}
+/*红色圆圈叉*/
+.icon-no{
+	background:url('icons/no.png') no-repeat center center;
+}
+/*红色无圆圈叉*/
+.icon-cancel{
+	background:url('icons/cancel.png') no-repeat center center;
+}
+/*蓝色重载刷新*/
+.icon-reload{
+	background:url('icons/reload.png') no-repeat center center;
+}
+.icon-search{
+	background:url('icons/search.png') no-repeat center center;
+}
+.icon-print{
+	background:url('icons/print.png') no-repeat center center;
+}
+.icon-help{
+	background:url('icons/help.png') no-repeat center center;
+}
+/*蓝色曲线回退*/
+.icon-undo{
+	background:url('icons/undo.png') no-repeat center center;
+}
+/*蓝色曲线前进*/
+.icon-redo{
+	background:url('icons/redo.png') no-repeat center center;
+}
+/*蓝色回退*/
+.icon-back{
+	background:url('icons/back.png') no-repeat center center;
+}
+/*蓝色求和*/
+.icon-sum{
+	background:url('icons/sum.png') no-repeat center center;
+}
+.icon-tip{
+	background:url('icons/tip.png') no-repeat center center;
+}
+/*过滤*/
+.icon-filter{
+	background:url('icons/filter.png') no-repeat center center;
+}
+/*男*/
+.icon-man{
+	background:url('icons/man.png') no-repeat center center;
+}
+/*黑色锁*/
+.icon-lock{
+	background:url('icons/lock.png') no-repeat center center;
+}
+/*黑色纵向3点更多*/
+.icon-more{
+	background:url('icons/more.png') no-repeat center center;
+}
+/*灰色齿轮设置*/
+.icon-set{
+	background:url('icons/set.png') no-repeat center center;
+}
+/*灰色齿轮配置*/
+.icon-cog{
+	background:url('icons/cog.png') no-repeat center center;
+}
+/*黑色密码锁*/
+.icon-lock-password{
+	background:url('icons/lock_password.png') no-repeat center center;
+}
+/*黑色密码锁+右键头*/
+.icon-lock-go{
+	background:url('icons/lock_go.png') no-repeat center center;
+}
+/*绿色刷新*/
+.icon-refresh{
+	background:url('icons/arrow_refresh.png') no-repeat center center;
+}
+/*排序：1-9*/
+.icon-sort{
+	background:url('icons/sort_number.png') no-repeat center center;
+}
+/*蓝色扳手修复*/
+.icon-repair{
+	background:url('icons/wrench.png') no-repeat center center;
+}
+/*文件夹+搜索*/
+.icon-folder-search{
+	background:url('icons/folder_search.png') no-repeat center center;
+}
+/*用户头像+扳手配置*/
+.icon-user-config{
+	background:url('icons/user_config.png') no-repeat center center;
+}
+.icon-recover-deleted-items{
+	background:url('icons/recover_deleted_items.png') no-repeat center center;
+}
+
+/*迷你：绿色加号*/
+.icon-mini-add{
+	background:url('icons/mini-append.png') no-repeat center center;
+}
+/*迷你：铅笔*/
+.icon-mini-edit{
+	background:url('icons/mini-pencil.png') no-repeat center center;
+}
+/*迷你：绿色刷新*/
+.icon-mini-refresh{
+	background:url('icons/mini-reload.png') no-repeat center center;
+}
+
+/*大图：图片*/
+.icon-large-picture{
+	background:url('icons/large_picture.png') no-repeat center center;
+}
+/*大图：剪贴画*/
+.icon-large-clipart{
+	background:url('icons/large_clipart.png') no-repeat center center;
+}
+/*大图：外形*/
+.icon-large-shapes{
+	background:url('icons/large_shapes.png') no-repeat center center;
+}
+/*大图：七彩米字*/
+/*大图：七彩米字*/
+.icon-large-smartart{
+	background:url('icons/large_smartart.png') no-repeat center center;
+}
+/*大图：图标*/
+.icon-large-chart{
+	background:url('icons/large_chart.png') no-repeat center center;
+}

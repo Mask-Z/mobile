@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>jquery点击弹出登陆窗口</title>
+	<style type="text/css">
+		pre font{font-weight:normal;}
+	</style>
+
+	<link rel="stylesheet" href="css/style.css" media="all">
+	<script src="js/jquery-1.7.2.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="js/ejy.js"></script>
+</head>
+<body>
+	<h3 style="text-align: center;">E交易系统--竞买人会员报名&登录</h3>
+	<pre style="border: solid 1px #ccc;padding:15px;font-weight: bold;">
+  >> 竞买人会员，快捷报名控件使用说明：
+	1) 引入js插件
+	<font>&lt;script type="text/javascript" src="js/jquery-1.7.2.min.js"&gt;&lt;/script&gt;
+	&lt;script type="text/javascript" src="js/ejy.js"&gt;&lt;/script&gt;</font>
+
+	2) 引入css样式
+	<font>&lt;link rel="stylesheet" href="css/style.css" media="all" /&gt;</font>
+
+	3) 添加登录对话框代码<font>
+	&lt;div id="ejy_huiyuan_baoming"&gt;
+	&lt;div class="theme-popover"&gt;
+		&lt;div class="theme-poptit"&gt;
+			&lt;a href="javascript:;" title="关闭" class="close"&gt;×&lt;/a&gt;
+			☺竞买人会员登录
+		&lt;/div&gt;
+		&lt;div class="theme-popbod dform"&gt;
+			&lt;form class="theme-signin" name="loginform" action="" method="post"&gt;
+			&lt;p&gt;&lt;strong&gt;会员：&lt;/strong&gt;&lt;input class="ipt" type="text" name="username" value="" size="20"/&gt;&lt;/p&gt;
+			&lt;p&gt;&lt;strong&gt;密码：&lt;/strong&gt;&lt;input class="ipt" type="password" name="password" value="" size="20"/&gt;&lt;/p&gt;
+			&lt;p&gt;&lt;strong&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;/strong&gt;&lt;input 
+			class="ejy_huiyuan_baoming_btn ejy_huiyuan_dl" type="button" value=" 登 录 "/&gt;&lt;/p&gt;
+			&lt;/form&gt;
+			&lt;font id="error" style="font-size: 12px;color: red;"&gt;&lt;/font&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div class="theme-popover-mask"&gt;&lt;/div&gt;
+	&lt;/div&gt;</font>
+
+	4) 添加报名按钮，必须设置<font color="red">id</font>，和<font color="red">class="ejy_huiyuan_bm"</font><font style="height:130px;">
+	样式一：&lt;a id="这里是<font color="red">项目编号</font>，比如：<font color="red">12GQ20160021</font>" class="<font color="red">ejy_huiyuan_bm</font> ejy_huiyuan_baoming_btn" href="javascript:;"&gt;报名&lt;/a&gt;
+	样式二：&lt;a id="<font color="red">12GQ20160018</font>" class="<font color="red">ejy_huiyuan_bm</font>" href="javascript:;"&gt;报名&lt;/a&gt;
+	样式三：&lt;button id="<font color="red">12GQ20160001</font>" class="ejy_huiyuan_bm"&gt;报名&lt;/button&gt;
+	样式四(用户自定义，比如span标签)：&lt;span id="<font color="red">12GQ20160001</font>" class="ejy_huiyuan_bm"&gt;报名&lt;/span&gt;</font>
+
+	5) 效果图：
+	<img src="css/demo.png" style="vertical-align: top;"/>
+	</pre>
+	样式一：<a id="12GQ20160021" class="ejy_huiyuan_bm ejy_huiyuan_baoming_btn" href="javascript:;">报名</a>
+
+	样式二：<a id="12GQ20160018" class="ejy_huiyuan_bm" href="javascript:;">报名</a>
+	
+	样式三：<button id="12GQ20160001" class="ejy_huiyuan_bm">报名</button>
+	
+	样式四：<span id="12GQ20160021" class="ejy_huiyuan_bm">报名</span>
+	
+
+	<div id="ejy_huiyuan_baoming">
+		<div class="theme-popover">
+			<div class="theme-poptit">
+				<a href="javascript:;" title="关闭" class="close">×</a>
+				☺竞买人会员登录
+			</div>
+			<div class="theme-popbod dform">
+				<form class="theme-signin" name="loginform" action="" method="post">
+				<p><strong>会员：</strong><input class="ipt" type="text" name="username" value="" size="20"/></p>
+				<p><strong>密码：</strong><input class="ipt" type="password" name="password" value="" size="20"/></p>
+				<p>
+					<a class="ejy_huiyuan_baoming_btn ejy_huiyuan_dl">登 录</a>
+					<a class="ejy_huiyuan_baoming_btn" target="_blank" style="background-color:#fea63a;border:#fea63a"
+						href="http://www.e-jy.com.cn/ejyhy/HuiYuanInfoMis2_CZCQ/Pages/HuiYuanRegisterTwo/Agree.aspx">我要注册</a>
+				</p>
+				</form>
+				<font id="error" style="font-size: 12px;color: red;"></font>
+			</div>
+		</div>
+		<div class="theme-popover-mask"></div>
+	</div>
+</body>
+</html>
+
