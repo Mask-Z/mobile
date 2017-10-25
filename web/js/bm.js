@@ -78,8 +78,51 @@ $(function(){
                 $('#loadingToast').fadeOut(3000);
             }
         });
-    });	
-    
+    });
+    $("#easyui_submit_file_btn").click(function(){
+
+        if ($("#uploaderInput").filebox('getValue')==""){
+            alert("请选择上传文件!");
+            return;
+        }
+        var f = document.getElementById("filebox_file_id_1").files;
+        var fileName=f[0].name;
+        var type=(fileName.substr(fileName.lastIndexOf("."))).toLowerCase();
+        if (type!=".doc"&&type!=".docx"&&type!=".txt"&&type!=".rar"&&type!=".jpg"&&type!=".jpeg"&&type!=".pdf"&&type!=".mp3"&&type!=".xls"&&type!=".xlsx"&&type!=".gif"&&type!=".bmp"){
+            alert("请上传后缀名为doc,docx,txt,rar,jpg,jpeg,pdf,mp3,xls,xlsx,gif,bmp类型的文件! \n上传文件名称请勿含特殊符号! ");
+            return;
+        }
+        if(!run){
+            run = true;
+        }else{
+            return;
+        }
+        console.log(f[0].size); //大小 字节
+        var fileform =new FormData($("#upform")[0]);
+        fileform.append("file2", f[0]);
+        $("#uploaderInput").val("");
+        $.ajax({
+            url: "file_upload",
+            type: "POST",
+            data: fileform,
+            processData: false,
+            contentType: false,
+            success: function(res,status,xhr){
+                run = false;
+                if(res){
+                    if(res.code==0){
+                        alert("上传成功!");
+                        loadFile();
+                    }
+                }else{
+                    alert("上传失败!");
+                }
+            },
+            error:function () {
+                alert("上传失败!");
+            }
+        });
+    });
     /**
 	 * 关闭报名回执
 	 */

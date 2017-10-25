@@ -141,90 +141,6 @@
             $iosMask.fadeIn(200);
         });
 
-        $("#union_delete").on("click", function () {
-            hideActionSheet();
-            var rowGuid = $("#union_waiting_handle").val();
-            $.ajax({
-                type: "POST",
-                url: "pj_gq_delUnion",
-                dataType: "json",
-                data: "rowGuid=" + rowGuid,
-                success: function (result) {
-                    if (result) {
-                        if (result.code == 0) {
-                            $("#toast_div").text("删除成功");
-                            $('#loadingToast').fadeIn(100);
-                            setUnionDiv($("#union_baoMing_guid").val());
-                        } else {
-                            $("#toast_div").text("删除失败");
-                            $('#loadingToast').fadeIn(100);
-                        }
-                        $('#loadingToast').fadeOut(100);
-                    }
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert(errorThrown);
-                }
-            });
-        });
-
-        $("#union_view").on("click", function () {
-            initUnionDialog("union_view");
-        });
-
-        $("#union_edit").on("click", function () {
-            initUnionDialog("union_edit");
-        });
-
-        function initUnionDialog(type) {
-            hideActionSheet();
-            var rowGuid = $("#union_waiting_handle").val();
-            $.ajax({
-                type: "POST",
-                url: "pj_gq_getUnion",
-                dataType: "json",
-                data: "rowGuid=" + rowGuid,
-                success: function (result) {
-                    if (result) {
-                        $("#shouRang_name").val(result.ShouRangName);
-                        $("#shouRangRen_type").val(result.ShouRangRenType);
-                        $("#shouRang_percent").val(result.ShouRangPercent);
-                        $("#shouRang_gufen").val(result.ShouRangGuFen);
-                        $("#lianXi_name").val(result.LianXiName);
-                        $("#lianXi_tel").val(result.LianXiTel);
-                        $("#lianXi_email").val(result.LianXiEmail);
-                        $("#lianXi_fax").val(result.LianXiFax);
-                        $("#weiTuoDW_name").val(result.WeiTuoDWName);
-                        $("#weiTuoDW_lianXiTel").val(result.WeiTuoDWLianXiTel);
-                        $("#weiTuoHY_heShi").val(result.WeiTuoHYHeShi);
-                        $("#weiTuoHY_No").val(result.WeiTuoHYNo);
-                        $("#weiTuoHY_name").val(result.WeiTuoHYName);
-                        $("#weiTuoHY_code").val(result.WeiTuoHYCode);
-                        $("#weiTuoHY_lianXiName").val(result.WeiTuoHYLianXiName);
-                        if (type == "union_view") {
-                            //查看时禁用所有输入并隐藏确定按钮
-                            $("#union_select_div").find("*").each(function () {
-                                $(this).attr("disabled", "disabled");
-                            });
-                            $("#btn_ok").hide();
-                        }
-                        if (type == "union_edit") {
-                            $("#union_row_guid").val(rowGuid);
-                            //修改时启用所有输入并显示确定按钮
-                            $("#union_select_div").find("*").each(function () {
-                                $(this).removeAttr("disabled");
-                            });
-                            $("#btn_ok").show();
-                            $("#union_type").val("union_edit");
-                        }
-                        $("#union_select_div").fadeIn(200);
-                    }
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert(errorThrown);
-                }
-            });
-        }
 
         $("#pj_sign_hyjg").on("click", function () {
             $("#hyjg_select_div").fadeIn(200);
@@ -425,11 +341,77 @@
             $("#btn_ok").show();
             $("#union_type").val("union_add");
             $('#union_select_div').panel('open');
-//            $("#union_select_div").attr("closed",'false');
-//            $.parser.parse($("#union_select_div"));
-//            $("#pj_gq_submit").hide();
         });
 
+        //编辑联合受让方
+        $("#btn_edit").on("click", function () {
+            var $table=$("#lhsrf");
+            var  row=$table.datagrid('getChecked');
+            if (row.length !=1){
+                alert("只能选择一条数据");
+                return;
+            }
+            var rowGuid=row[0].rowGuid;
+            $.ajax({
+                type: "POST",
+                url: "pj_gq_getUnion",
+                dataType:"json",
+                data: "rowGuid=" + rowGuid,
+                success: function(result){
+                    if(result){
+                        $('#shouRang_name').combogrid('setValue',result.ShouRangName);
+                        $('#shouRangRen_type').combobox('setValue',result.ShouRangRenType);
+                        $("#shouRang_percent").textbox("setValue", result.ShouRangPercent);
+                        $("#shouRang_gufen").textbox("setValue", result.ShouRangGuFen);
+                        $("#lianXi_name").textbox("setValue", result.LianXiName);
+                        $("#lianXi_tel").textbox("setValue", result.LianXiTel);
+                        $("#lianXi_email").textbox("setValue", result.LianXiEmail);
+                        $("#lianXi_fax").textbox("setValue", result.LianXiFax);
+                        $("#weiTuoDW_name").textbox("setValue", result.WeiTuoDWName);
+                        $("#weiTuoDW_lianXiTel").textbox("setValue", result.WeiTuoDWLianXiTel);
+                        $("#weiTuoHY_heShi").textbox("setValue", result.WeiTuoHYHeShi);
+                        $("#weiTuoHY_No").textbox("setValue", result.WeiTuoHYNo);
+                        $("#weiTuoHY_name").textbox("setValue", result.WeiTuoHYName);
+                        $("#weiTuoHY_code").textbox("setValue", result.WeiTuoHYCode);
+                        $("#weiTuoHY_lianXiName").textbox("setValue", result.WeiTuoHYLianXiName);
+                        $("#union_row_guid").val(rowGuid);
+                        $('#union_select_div').panel('open');
+                    }
+                },
+                error:function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
+            });
+        });
+
+        //删除联合受让方
+        $("#btn_delete").on("click", function () {
+            var $table=$("#lhsrf");
+            var  row=$table.datagrid('getChecked');
+            if (row.length !=1){
+                alert("只能选择一条数据");
+                return;
+            }
+            $.ajax({
+                type: "get",
+                url: "pj_gq_delUnion?rowGuid="+row[0].rowGuid,
+                dataType: "json",
+                success: function (result) {
+                    if (result) {
+                        if (result.code == 0) {
+                            alert("操作成功");
+                        } else {
+                            alert("操作失败");
+                        }
+                        $('#loadingToast').fadeOut(100);
+                    }
+                    $("#lhsrf").datagrid('reload');
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
+            });
+        });
 //        $("#is_managerLayer").change(function(){
 //            var is_managerLayer = $(this).val();
 //            if(is_managerLayer == 1){
@@ -496,8 +478,8 @@
         $("#btn_ok").click(function () {
             var flag = true;
             var text = '';
-            if (zhuanRangType == "1" && $("#shouRang_percent").val() > 100) {
-                text = '受让比例请输入不大于100的值';
+            if (zhuanRangType == "1" && ($("#shouRang_percent").val() > 100 ||  $("#shouRang_percent").val() < 0)) {
+                text = '受让比例请输入不小于0且不大于100的值';
                 flag = false;
             }
 
@@ -707,8 +689,6 @@
     var task_code = "CQJY_GQBaoMing";
 
     function loadFile() {
-        $("#toast_div").text("加载中");
-        $('#loadingToast').fadeIn(100);
         var data = {};
         data.bmguid = "${data.RowGuid }";
         data.taskCode = task_code;
@@ -1169,12 +1149,12 @@
         </table>
         <div id="ft" style="padding:2px 5px;">
             <a class="easyui-linkbutton" iconCls="icon-add" plain="true" id="btn_add">添加</a>
-            <a class="easyui-linkbutton" iconCls="icon-edit" plain="true">编辑</a>
-            <a class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
+            <a class="easyui-linkbutton" iconCls="icon-edit" plain="true" id="btn_edit">编辑</a>
+            <a class="easyui-linkbutton" iconCls="icon-remove" plain="true" id="btn_delete">删除</a>
         </div>
         <br>
         <p>相关附件</p>
-        <c:forEach items="${filelist}" var="file">
+        <c:forEach items="${filelist}" var="file" varStatus="x">
             <div class="weui-cell weui-cell_vcode">
                 <div class="weui-cell__hd">
                     <label class="weui-label">${file.FileName} <c:if
@@ -1187,11 +1167,14 @@
                         <%--<label class="label-top" style="width:100%; display:block;">文件管理:</label>--%>
 
 
-                    <form id="upform">
-                        <input name="fileCode" id="fileCode" type="hidden">
+                    <form id="upform${x.count}" method="post" enctype="multipart/form-data">
+                        <input name="fileCode" id="fileCode" type="hidden" value="${file.FileCode}">
                         <input name="rowGuid" type="hidden" value="${data.RowGuid }">
                         <input class="easyui-filebox" style="width:300px" id="uploaderInput" name="file"
-                               data-options="buttonIcon:'icon-folder-search',buttonText:''" name="file_div">
+                               data-options="buttonIcon:'icon-folder-search',buttonText:''">
+                        <%--<a id="easyui_submit_file_btn" class="easyui-linkbutton" style="width:10%" >Upload</a>--%>
+                        <a id="easyui_submit_file_btn${x.count}" class="easyui-linkbutton" style="width:10%" onclick="uploadfile(${x.count})" >Upload</a>
+
                     </form>
                 </div>
             </div>
@@ -1207,7 +1190,50 @@
         </div>
     </h4>
 </form>
+<script>
+    function uploadfile(code) {
+        var $uploaderInput=$("#uploaderInput"+code);
+        var $upform=$("#upform"+code);
+        var fileid="filebox_file_id_"+code;
 
+        if ($uploaderInput.filebox('getValue')==""){
+            alert("请选择上传文件!");
+            return;
+        }
+        var f = document.getElementById(fileid).files;
+        var fileName=f[0].name;
+        var type=(fileName.substr(fileName.lastIndexOf("."))).toLowerCase();
+        if (type!=".doc"&&type!=".docx"&&type!=".txt"&&type!=".rar"&&type!=".jpg"&&type!=".jpeg"&&type!=".pdf"&&type!=".mp3"&&type!=".xls"&&type!=".xlsx"&&type!=".gif"&&type!=".bmp"){
+            alert("请上传后缀名为doc,docx,txt,rar,jpg,jpeg,pdf,mp3,xls,xlsx,gif,bmp类型的文件! \n上传文件名称请勿含特殊符号! ");
+            return;
+        }
+        console.log(f[0].size); //大小 字节
+        var fileform =new FormData($upform[0]);
+        fileform.append("file2", f[0]);
+        $uploaderInput.val("");
+        $.ajax({
+            url: "file_upload",
+            type: "POST",
+            data: fileform,
+            processData: false,
+            contentType: false,
+            success: function(res,status,xhr){
+                run = false;
+                if(res){
+                    if(res.code==0){
+                        alert("上传成功!");
+                        loadFile();
+                    }
+                }else{
+                    alert("上传失败!");
+                }
+            },
+            error:function () {
+                alert("上传失败!");
+            }
+        });
+    }
+</script>
 <!--新增联合受让方dialog start-->
 <style>
     .xzlhsrf {
@@ -1253,6 +1279,7 @@
                 </div> -->
 
                 <div style="margin-bottom:20px">
+
                     <label class="label-top">受让方名称<font color="red">(*)</font>:</label>
                     <select class="easyui-combogrid" style="width:100%" data-options="
                     panelWidth: 600,
