@@ -743,16 +743,17 @@
 <table class="myform" title="报名详情" style="width:100%;height:250px" border="1">
     <thead>
     <tr>
+        <td class="title">标的编号</td>
+        <td colspan="4">${data.ProjectNo_3001 }</td>
+    </tr>
+    <tr>
+        <td class="title">标的名称</td>
+        <td colspan="4">${data.ProjectName_3001 } </td>
+    </tr>
+    <tr>
         <td class="title">标的类型</td>
-        <td colspan="4">股权</td>
-    </tr>
-    <tr>
-        <td class="title">挂牌价</td>
-        <td colspan="4">20.000000万元 </td>
-    </tr>
-    <tr>
-        <td class="title">报名截止时间</td>
-        <td colspan="4">2017/10/27 23:59:59     距离报名截止时间还有： xxx</td>
+        <td colspan="4"><c:if test="${data.BiaoDiType_3001==1}">股权</c:if>
+            <c:if test="${data.BiaoDiType_3001==2}">股权+债权</c:if></td>
     </tr>
     <tr>
         <td class="title" colspan="5">报名信息：如有基本信息未填写，请先到会员库中完善基本信息 </td>
@@ -791,7 +792,7 @@
     </thead>
 </table>
 
-
+<!--
 <table id="table" style="height:100%;width: 100%;" data-options="">
     <thead>
     <tr>
@@ -1030,6 +1031,7 @@
     <div data-options="name:'delete'">Delete</div>
     <div>Select All</div>
 </div>
+-->
 <form id="pj_gq_submit">
     <%
         Object obj = request.getAttribute("data");
