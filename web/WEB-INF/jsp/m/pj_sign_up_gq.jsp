@@ -39,6 +39,33 @@
 </head>
 
 <body>
+<%
+    Object obj = request.getAttribute("data");
+    String bbdate = "";
+    String cldate = "";
+    String areaName = "";
+    if (obj != null) {
+        Map map = (Map) obj;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat sdf_ = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            if (map.containsKey("BaoBiaoDate")) {
+                String bd = map.get("BaoBiaoDate").toString();
+                if (StringUtils.isNotBlank(bd)) {
+                    bbdate = sdf_.format(sdf.parse(bd));
+                }
+            }
+            if (map.containsKey("ChengLiDate")) {
+                String bd = map.get("ChengLiDate").toString();
+                if (StringUtils.isNotBlank(bd)) {
+                    cldate = sdf_.format(sdf.parse(bd));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+%>
 <style>
     .weui-cells .weui-cell-srf:nth-child(2n+2) {
         background-color: #f5f5f5;
@@ -663,6 +690,7 @@
     });
 
     var task_code = "CQJY_GQBaoMing";
+
     function loadFile() {
         $("#toast_div").text("加载中");
         $('#loadingToast').fadeIn(100);
@@ -714,7 +742,52 @@
     }
 </script>
 <script type="text/javascript" src="js/city-picker.js"></script>
+<script>
+    $(function () {
+        $('input:radio[name=""]').change(function () {
 
+        })
+    })
+
+    $(function(){
+//        if ($.browser.msie) {
+//            $('input:checkbox').click(function () {
+//                this.blur();
+//                this.focus();
+//            });
+//        };
+        var ml="${data.IsManagerLayer}";
+        var usertype="${user_type }";
+        if (ml =='1'){
+            if (usertype==0) {//单位
+                $("#row_danwei").attr("rowspan","12");
+                $("#zhiwu_div").show();
+            }
+            if (usertype==1){//个人
+                $("#row_geren").attr("rowspan", "7");
+                $("#zhiwu_div").show();
+            }
+        }
+        $("#managerLayer_geren").change(function() {
+            if($("#managerLayer_geren").is(':checked')){
+                    $("#row_geren").attr("rowspan","7");
+                    $("#zhiwu_div").show();
+            }else{
+                $("#row_geren").attr("rowspan","6");
+                $("#zhiwu_div").hide();
+            }
+        });
+        $("#managerLayer_danwei").change(function() {
+            if($("#managerLayer_danwei").is(':checked')){
+                $("#row_danwei").attr("rowspan","12");
+                $("#zhiwu_div").show();
+            }else{
+                $("#row_danwei").attr("rowspan","11");
+                $("#zhiwu_div").hide();
+            }
+        });
+    });
+</script>
 <header class="h43">
     <div class="index-header">
         <a href="pj_list_cqjy" class="back"></a>
@@ -723,7 +796,6 @@
     </div>
 </header>
 <style type="text/css">
-    <!--
     .title {
         background: skyblue;
     }
@@ -736,168 +808,10 @@
         padding: 2px;
     }
 
-    -->
 </style>
 <h4>报名详情</h4>
 <div style="margin:5px 0;"></div>
-<table class="myform" title="报名详情" style="width:100%;height:250px" border="1">
-    <thead>
-    <tr>
-        <td class="title">标的编号</td>
-        <td colspan="2">${data.ProjectNo_3001 }</td>
-        <td class="title">标的名称</td>
-        <td colspan="2">${data.ProjectName_3001 }</td>
-    </tr>
-    <tr>
-        <td class="title">标的类型</td>
-        <td colspan="5"><c:if test="${data.BiaoDiType_3001==1}">股权</c:if>
-            <c:if test="${data.BiaoDiType_3001==2}">股权+债权</c:if></td>
-    </tr>
-    <tr>
-        <td class="title">挂牌价</td>
-        <td colspan="5"><fmt:formatNumber type="number" value="${data.GuaPaiPrice }" pattern="0.000000"
-                                          maxFractionDigits="6"/> 万元
-        </td>
-    </tr>
-    <tr>
-        <td class="title">报名截止时间</td>
-        <td colspan="5">${data.GongGaoToDate}&nbsp;&nbsp;<span id="bmjzsj"></span>&nbsp;&nbsp;<a
-                class="weui-btn weui-btn_primary" href="infodetail?${fn:split(data.GongGaoUrl,'?')[1]}">查看网站公告原文</a>
-        </td>
-    </tr>
-    <tr>
-        <td class="title" colspan="6">报名信息：如有基本信息未填写，请先到会员库中完善基本信息</td>
-    </tr>
-    <tr>
-        <td class="title">是否国资<font color="red">(*)</font></td>
-        <td colspan="2">
-            <input type="radio" name="info['IsGuoZi']" value="T"
-                   <c:if test="${data.IsGuoZi=='T'}">checked="true"</c:if>>国资</input>
-            <input type="radio" name="info['IsGuoZi']" value="F"
-                   <c:if test="${data.IsGuoZi=='F'}">checked="true"</c:if>>非国资</input>
-        </td>
-        <td class="title">法人类型<font color="red">(*)</font></td>
-        <td colspan="2">
-            <input type="radio" name="frlx" <c:if test="${data.FaRenType==2}">checked="true"</c:if> disabled>自然人</input>
-            <input type="radio" name="frlx" <c:if test="${data.FaRenType==1}">checked="true"</c:if> disabled>企事业单位</input>
-        </td>
-    </tr>
-    <tr>
-        <td class="title" rowspan="17">基本情况</td>
-        <td class="title">受让方名称</td>
-        <td colspan="2">${data.DanWeiName }</td>
-        <td class="title">所在地区<font color="red">(*)</font></td>
-        <td colspan="2">${data.AreaName }</td>
-    </tr>
-    <tr>
-        <td colspan="5"><input type="checkbox" <c:if test="${data.IsManagerLayer=='1'}">checked</c:if>>标的企业管理层直接或间接出资</td>
-    </tr>
-    <tr>
-        <td class="title">注册地<font color="red">(*)</font></td>
-        <td colspan="2">
-            <input class="easyui-textbox" type="text"/>
-        </td>
-        <td class="title">注册资本<font color="red">(*)</font></td>
-        <td colspan="2">
-            <input class="easyui-textbox" type="text"/>
-        </td>
-    </tr>
-    <tr>
-        <td class="title">成立时间</td>
-        <td colspan="2">
-            <input class="easyui-textbox" type="text"/>
-        </td>
-        <td class="title">法定代表人</td>
-        <td colspan="2">
-            <input class="easyui-textbox" type="text"/>
-        </td>
-    </tr>
-    <tr>
-        <td class="title">所属行业<font color="red">(*)</font> </td>
-        <td colspan="5">
-            <input class="easyui-textbox" type="text"/>
-        </td>
-    </tr>
-    <tr>
-        <td class="title">金融类所属行业 </td>
-        <td colspan="5">
-            <input class="easyui-textbox" type="text"/>
-        </td>
-    </tr>
-    <tr>
-        <td class="title">公司类型(经济性质)<font color="red">(*)</font></td>
-        <td colspan="2">
-            <input class="easyui-textbox" type="text"/>
-        </td>
-        <td class="title">企业性质(经济类型)<font color="red">(*)</font></td>
-        <td colspan="2">
-            <input class="easyui-textbox" type="text"/>
-        </td>
-    </tr>
-    <tr>
-        <td class="title">企业组织机构代码</td>
-        <td colspan="2">
-            <input class="easyui-textbox" type="text"/>
-        </td>
-        <td class="title">经营规模<font color="red">(*)</font></td>
-        <td colspan="2">
-            <input <c:if test ="${data.GuiMo==0}">checked</c:if> type="radio" name="info['GuiMo']" value="0"/>大型
-            <input <c:if test ="${data.GuiMo==1}">checked</c:if> type="radio" name="info['GuiMo']" value="1"/>中型
-            <input <c:if test ="${data.GuiMo==2}">checked</c:if> type="radio" name="info['GuiMo']" value="2"/>小型
-            <input <c:if test ="${data.GuiMo==3}">checked</c:if> type="radio" name="info['GuiMo']" value="3"/>微型
-        </td>
-    </tr>
-    <tr>
-        <td class="title" rowspan="2">经营范围<font color="red">(*)</font></td>
-        <td colspan="5" >
-            <input class="easyui-textbox" type="text"/>
-        </td>
-    </tr>
-    <tr>
-        <td class="title" rowspan="2">受让资格陈述</td>
-        <td colspan="5">
-            <input class="easyui-textbox" type="text"/>
-        </td>
-    </tr>
-    <tr>
-        <td class="title" rowspan="5">近期资产情况</td>
-        <td colspan="5">
-            <input class="easyui-textbox" type="text"/>
-        </td>
-    </tr>
-    <tr>
-        <td class="title" rowspan="3">委托会员</td>
-        <td class="title">机构名称</td>
-        <td>
-            <input class="easyui-textbox" type="text"/>
-        </td>
-        <td class="title">工位号</td>
-        <td>
-            <input class="easyui-textbox" type="text"/>
-        </td>
-    </tr>
-    <tr>
-        <td class="title">经纪</td>
-        <td>
-            <input class="easyui-textbox" type="text"/>
-        </td>
-        <td class="title">经纪人编码</td>
-        <td>
-            <input class="easyui-textbox" type="text"/>
-        </td>
-    </tr>
-    <tr>
-        <td class="title">联系人</td>
-        <td>
-            <input class="easyui-textbox" type="text"/>
-        </td>
-        <td class="title">联系电话</td>
-        <td>
-            <input class="easyui-textbox" type="text"/>
-        </td>
-    </tr>
-    </thead>
-</table>
+
 
 <!--
 <table id="table" style="height:100%;width: 100%;" data-options="">
@@ -1140,33 +1054,6 @@
 </div>
 -->
 <form id="pj_gq_submit">
-    <%
-        Object obj = request.getAttribute("data");
-        String bbdate = "";
-        String cldate = "";
-        String areaName = "";
-        if (obj != null) {
-            Map map = (Map) obj;
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-            SimpleDateFormat sdf_ = new SimpleDateFormat("yyyy-MM-dd");
-            try {
-                if (map.containsKey("BaoBiaoDate")) {
-                    String bd = map.get("BaoBiaoDate").toString();
-                    if (StringUtils.isNotBlank(bd)) {
-                        bbdate = sdf_.format(sdf.parse(bd));
-                    }
-                }
-                if (map.containsKey("ChengLiDate")) {
-                    String bd = map.get("ChengLiDate").toString();
-                    if (StringUtils.isNotBlank(bd)) {
-                        cldate = sdf_.format(sdf.parse(bd));
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    %>
     <input type="hidden" name="bmguid" value="${bmguid}"><!-- 修改时,被修改的报名guid,新增时该值为空 -->
     <input type="hidden" name="info['type']" value="GQ"><!-- 系统类别-->
     <input type="hidden" name="info['RowGuid']" value="${data.RowGuid }"><!-- 报名唯一标识 -->
@@ -1200,223 +1087,115 @@
     <input type="hidden" id="lbl_isManagerLayer" value="${data.IsManagerLayer}">
     <input type="hidden" name="info['JinQiZiChan']" id="jinQi_ziChan" value="${data.JinQiZiChan}">
 
-    <div class="weui-toptips weui-toptips_warn js_tooltips" style="top: 43px" id="srf_js_tooltips"></div>
-    <div class="weui-toptips weui-toptips_warn js_tooltips" style="top: 43px" id="js_tooltips"></div>
-    <div class="weui-cells weui-cells_form no-mt">
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">标的编号</label></div>
-            <div class="weui-cell__bd">${data.ProjectNo_3001 }
-            </div>
-        </div>
 
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">标的名称</label></div>
-            <div class="weui-cell__bd">${data.ProjectName_3001 }
-            </div>
-        </div>
-
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">标的类型</label></div>
-            <div class="weui-cell__bd"><c:if test="${data.BiaoDiType_3001==1}">股权</c:if>
-                <c:if test="${data.BiaoDiType_3001==2}">股权+债权</c:if>
-            </div>
-        </div>
-
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">挂牌价</label></div>
-            <div class="weui-cell__bd" style="color: red">
-                <fmt:formatNumber type="number" value="${data.GuaPaiPrice }" pattern="0.000000" maxFractionDigits="6"/>
-                万元
-                <%--${data.GuaPaiPrice }万元--%>
-            </div>
-        </div>
-
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">报名截止时间</label></div>
-            <div class="weui-cell__bd">
-                ${data.GongGaoToDate}
-            </div>
-        </div>
-
-        <%--<div class="weui-cell">--%>
-        <%--<div class="weui-cell__hd"><label class="weui-label">距离报名截止时间</label></div>--%>
-        <%--<div class="weui-cell__bd" id="bmjzsj">--%>
-        <%--</div>--%>
-        <%--</div>--%>
-
-        <div class="weui-btn-area">
-            <%--<a class="weui-btn weui-btn_primary" href="infodetail?infoid=${ProjectGuid}" >查看网站公告原文</a>--%>
-            <a class="weui-btn weui-btn_primary" href="infodetail?${fn:split(data.GongGaoUrl,'?')[1]}">查看网站公告原文</a>
-        </div>
-        <div class="weui-cells__title">报名信息</div>
-
-        <div class="weui-cell weui-cell_select weui-cell_select-after">
-            <div class="weui-cell__hd"><label class="weui-label">是否国资</label></div>
-            <div class="weui-cell__bd">
-                <select class="weui-select" name="info['IsGuoZi']">
-                    <option value="T" <c:if test="${data.IsGuoZi=='T'}">selected</c:if>>国资</option>
-                    <option value="F" <c:if test="${data.IsGuoZi=='F'}">selected</c:if>>非国资</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">法人类型<font color="red">(*)</font></label></div>
-            <div class="weui-cell__bd"><c:if test="${data.FaRenType==2}">自然人</c:if><c:if
-                    test="${data.FaRenType==1}">企事业单位</c:if>
-            </div>
-        </div>
-
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">受让方名称</label></div>
-            <div class="weui-cell__bd">${data.DanWeiName }
-            </div>
-        </div>
-
-        <div class="weui-cell weui-cell_select weui-cell_select-after">
-            <div class="weui-cell__hd"><label class="weui-label">是否标的企业管理层直接或间接出资</label></div>
-            <div class="weui-cell__bd">
-                <select class="weui-select" name="info['IsManagerLayer']" id="is_managerLayer">
-                    <option value="0" <c:if test="${data.IsManagerLayer=='0'}">selected</c:if>>否</option>
-                    <option value="1" <c:if test="${data.IsManagerLayer=='1'}">selected</c:if>>是</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="weui-cell" id="zhiwu_div" style="display: none;">
-            <div class="weui-cell__hd"><label class="weui-label">职务<font color="red">(*)</font></label></div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" name="info['ZhiWu']" type="text" id="zhi_wu" value="${data.ZhiWu }"
-                       placeholder="请输入职务"/>
-            </div>
-        </div>
-
-        <div class="weui-cell weui-cell_select weui-cell_select-after" id="shenji" style="display:none">
-            <div class="weui-cell__hd"><label class="weui-label">是否进行了经济责任审计<font color="red">(*)</font></label></div>
-            <div class="weui-cell__bd">
-                <select class="weui-select" name="info['hasAudit']">
-                    <option value="1" <c:if test="${data.hasAudit=='1'}">selected</c:if>>是</option>
-                    <option value="0" <c:if test="${data.hasAudit=='0'}">selected</c:if>>否</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="weui-cell weui-cell_select">
-            <div class="weui-cell__hd">
-                <label for="" class="weui-label">所在地区<font color="red">(*)</font></label>
-            </div>
-            <div class="weui-cell__bd">
-                <input class="weui-select" id="area" type="text" value="${data.AreaName.replace("·"," ")}">
-            </div>
-        </div>
-
-        <c:if test="${user_type==1 }">
-            <!-- 个人会员信息 begin -->
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">证件名称</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" name="info['ZhengName']" type="text" value="${data.ZhengName }"
-                           placeholder="请输入证件名称"/>
-                </div>
-            </div>
-
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">证件号码<font color="red">(*)</font></label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" name="info['ZhengNo']" type="text" id="zheng_No" value="${data.ZhengNo }"
-                           placeholder="请输入证件号码"/>
-                </div>
-            </div>
-
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">工作单位</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" name="info['GongZuoDanWei']" type="text" value="${data.GongZuoDanWei }"
-                           placeholder="请输入工作单位"/>
-                </div>
-            </div>
-
-            <div class="weui-cell weui-cell_select weui-cell_select-after">
-                <div class="weui-cell__hd"><label class="weui-label">资金来源</label></div>
-                <div class="weui-cell__bd">
-                    <select class="weui-select" name="info['ZiJinLaiYuan']">
-                        <option value="0" <c:if test="${data.ZiJinLaiYuan=='0'}">selected</c:if>>自有</option>
-                        <option value="1" <c:if test="${data.ZiJinLaiYuan=='1'}">selected</c:if>>融资</option>
-                        <option value="2" <c:if test="${data.ZiJinLaiYuan=='2'}">selected</c:if>>其他</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="weui-cells__tips">个人资产申报</div>
-            <div class="weui-cell">
-                <div class="weui-cell__bd">
-                    <textarea class="weui-textarea" name="info['GeRenZiChan']" rows="3">${data.GeRenZiChan }</textarea>
-                </div>
-            </div>
-            <!-- 个人会员信息 end -->
-        </c:if>
+    <table class="myform" title="报名详情" style="width:100%;height:250px" border="1">
+        <thead>
+        <tr>
+            <td class="title">标的编号</td>
+            <td colspan="3">${data.ProjectNo_3001 }</td>
+            <td class="title">标的名称</td>
+            <td colspan="2">${data.ProjectName_3001 }</td>
+        </tr>
+        <tr>
+            <td class="title">标的类型</td>
+            <td colspan="5"><c:if test="${data.BiaoDiType_3001==1}">股权</c:if>
+                <c:if test="${data.BiaoDiType_3001==2}">股权+债权</c:if></td>
+        </tr>
+        <tr>
+            <td class="title">挂牌价</td>
+            <td colspan="5"><fmt:formatNumber type="number" value="${data.GuaPaiPrice }" pattern="0.000000"
+                                              maxFractionDigits="6"/> 万元
+            </td>
+        </tr>
+        <tr>
+            <td class="title">报名截止时间</td>
+            <td colspan="5">${data.GongGaoToDate}&nbsp;&nbsp;<span id="bmjzsj"></span>&nbsp;&nbsp;<a
+                    class="weui-btn weui-btn_primary" href="infodetail?${fn:split(data.GongGaoUrl,'?')[1]}">查看网站公告原文</a>
+            </td>
+        </tr>
+        <tr>
+            <td class="title" colspan="6">报名信息：如有基本信息未填写，请先到会员库中完善基本信息</td>
+        </tr>
+        <tr>
+            <td class="title">是否国资<font color="red">(*)</font></td>
+            <td colspan="3">
+                <input type="radio" name="info['IsGuoZi']" value="T"
+                       <c:if test="${data.IsGuoZi=='T'}">checked="true"</c:if>>国资</input>
+                <input type="radio" name="info['IsGuoZi']" value="F"
+                       <c:if test="${data.IsGuoZi=='F'}">checked="true"</c:if>>非国资</input>
+            </td>
+            <td class="title">法人类型<font color="red">(*)</font></td>
+            <td colspan="2">
+                <input type="radio" name="frlx"
+                       <c:if test="${data.FaRenType==2}">checked="true"</c:if> disabled>自然人</input>
+                <input type="radio" name="frlx"
+                       <c:if test="${data.FaRenType==1}">checked="true"</c:if> disabled>企事业单位</input>
+            </td>
+        </tr>
 
         <c:if test="${user_type==0 }">
             <!-- 单位信息 begin -->
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">注册地<font color="red">(*)</font></label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" name="info['ZhuCeDi']" type="text" id="zhuCe_di" value="${data.ZhuCeDi }"
-                           placeholder="请输入注册地"/>
-                </div>
-            </div>
-
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">注册资本（万元）<font color="red">(*)</font></label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" name="info['ZhuCeZiBen']" type="zb" id="zhuCe_ziBen"
-                           value="${data.ZhuCeZiBen }"/>
-                </div>
-            </div>
-
-            <div class="weui-cell weui-cell_select weui-cell_select-after">
-                <div class="weui-cell__hd"><label class="weui-label">币种</label></div>
-                <div class="weui-cell__bd">
-                    <select class="weui-select" name="info['BiZhong']">
-                        <c:forEach items="${biZhongs}" var="biZhong">
-                            <option value="${biZhong.code}"
-                                    <c:if test="${biZhong.code eq data.BiZhong}">selected</c:if>>${biZhong.value}</option>
-                        </c:forEach>
-                    </select>
-                </div>
-            </div>
-
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label for="" class="weui-label">成立时间</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" type="date" name="info['ChengLiDate']" value="<%=cldate %>">
-                </div>
-            </div>
-
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label for="" class="weui-label">法定代表人</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" name="info['FaRen_13003']" value="${data.FaRen_13003 }">
-                </div>
-            </div>
-
-            <div class="weui-cell weui-cell_select weui-cell_select-after">
-                <div class="weui-cell__hd"><label class="weui-label">所属行业<font color="red">(*)</font></label></div>
-                <div class="weui-cell__bd">
-                    <select class="weui-select" name="info['HangYeTypeCode']" id="hangYeType_code">
+            <tr>
+                <td class="title" rowspan="11" id="row_danwei">基本情况</td>
+                <td class="title">受让方名称</td>
+                <td colspan="2">${data.DanWeiName }</td>
+                <td class="title">所在地区<font color="red">(*)</font></td>
+                <td colspan="1" id="area">${data.AreaName }</td>
+            </tr>
+            <tr>
+                <td colspan="5"><input name="info['IsManagerLayer']" type="checkbox" id="managerLayer_danwei"
+                                       <c:if test="${data.IsManagerLayer=='1'}">checked</c:if>>标的企业管理层直接或间接出资
+                </td>
+            </tr>
+            <tr id="zhiwu_div" style="display: none;">
+                <td class="title">职务<font color="red">(*)</font></td>
+                <td colspan="2">
+                    <input class="easyui-textbox" name="info['ZhiWu']" type="text" id="zhi_wu" value="${data.ZhiWu }" placeholder="请输入职务"/>
+                </td>
+                <td class="title">是否进行了经济责任审计<font color="red">(*)</font></td>
+                <td colspan="1" >
+                    <input type="radio" value="1" name="info['hasAudit']" <c:if test="${empty data.hasAudit or data.hasAudit=='1'}">checked="true"</c:if>>是
+                    <input type="radio" value="0" name="info['hasAudit']" <c:if test="${data.hasAudit=='0'}">checked="true"</c:if>>否
+                </td>
+            </tr>
+            <tr>
+                <td class="title">注册地<font color="red">(*)</font></td>
+                <td colspan="2">
+                    <input class="easyui-textbox" type="text" name="info['ZhuCeDi']" value="${data.ZhuCeDi }"
+                           data-options="required:true"/>
+                </td>
+                <td class="title">注册资本<font color="red">(*)</font></td>
+                <td colspan="1">
+                    <input class="easyui-textbox" type="text" name="info['ZhuCeZiBen']" value="${data.ZhuCeZiBen }"
+                           data-options="required:true"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">成立时间</td>
+                <td colspan="2">
+                    <input class="easyui-datebox" type="text" name="info['ChengLiDate']" value="<%=cldate %>"/>
+                </td>
+                <td class="title">法定代表人</td>
+                <td colspan="1">
+                    <input class="easyui-textbox" type="text" name="info['FaRen_13003']" value="${data.FaRen_13003 }"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">所属行业<font color="red">(*)</font></td>
+                <td colspan="4">
+                    <select class="easyui-combobox" name="info['HangYeTypeCode']" style="width:50%;" id="hangYeType_code">
                         <c:forEach items="${hangYeTypes}" var="hangYeType">
                             <option value="${hangYeType.code}"
                                     <c:if test="${hangYeType.code eq data.HangYeTypeCode}">selected</c:if>>${hangYeType.value}</option>
                         </c:forEach>
                     </select>
                     <input type="hidden" name="info['HangYeType']" value="${data.HangYeType}">
-                </div>
-            </div>
-
-            <div class="weui-cell weui-cell_select weui-cell_select-after">
-                <div class="weui-cell__hd"><label class="weui-label">金融类所属行业</label></div>
-                <div class="weui-cell__bd">
-                    <select class="weui-select" name="info['IndustryCCode']" id="industryC_code">
+                </td>
+            </tr>
+            <tr>
+                <td class="title">金融类所属行业</td>
+                <td colspan="4">
+                    <select class="easyui-combobox" name="info['IndustryCCode']" style="width:50%;" id="industryC_code">
                         <option value=""></option>
                         <c:forEach items="${industryCs}" var="industryC">
                             <option value="${industryC.code}"
@@ -1424,332 +1203,235 @@
                         </c:forEach>
                     </select>
                     <input type="hidden" name="info['IndustryCName']" value="${data.IndustryCName}">
-                </div>
-            </div>
-
-            <div class="weui-cell weui-cell_select weui-cell_select-after">
-                <div class="weui-cell__hd">
-                    <label for="" class="weui-label">公司类型（经济性质）<font color="red">(*)</font></label>
-                </div>
-                <div class="weui-cell__bd">
-                    <select class="weui-select" name="info['CompanyLeiXing']">
+                </td>
+            </tr>
+            <tr>
+                <td class="title">公司类型(经济性质)<font color="red">(*)</font></td>
+                <td colspan="2">
+                    <select class="easyui-combobox" style="width: 50%" name="info['CompanyLeiXing']">
                         <c:forEach items="${companyLeiXings}" var="companyLeiXing">
                             <option value="${companyLeiXing.code}"
                                     <c:if test="${companyLeiXing.code eq data.CompanyLeiXing}">selected</c:if>>${companyLeiXing.value}</option>
                         </c:forEach>
                     </select>
-                </div>
-            </div>
-
-            <div class="weui-cell weui-cell_select weui-cell_select-after">
-                <div class="weui-cell__hd">
-                    <label for="" class="weui-label">企业性质（经济类型）<font color="red">(*)</font></label>
-                </div>
-                <div class="weui-cell__bd">
-                    <select class="weui-select" name="info['CompanyXingZhi']">
+                </td>
+                <td class="title">企业性质(经济类型)<font color="red">(*)</font></td>
+                <td colspan="1">
+                    <select class="easyui-combobox" style="width: 50%" name="info['CompanyXingZhi']">
                         <c:forEach items="${companyXingZhis}" var="companyXingZhi">
                             <option value="${companyXingZhi.code}"
                                     <c:if test="${companyXingZhi.code eq data.CompanyXingZhi}">selected</c:if>>${companyXingZhi.value}</option>
                         </c:forEach>
                     </select>
-                </div>
-            </div>
-
-            <div class="weui-cell weui-cell_select weui-cell_select-after">
-                <div class="weui-cell__hd">
-                    <label for="" class="weui-label">经济规模<font color="red">(*)</font></label>
-                </div>
-                <div class="weui-cell__bd">
-                    <select class="weui-select" name="info['GuiMo']">
-                        <option value="0" <c:if test="${data.GuiMo==0}">selected</c:if>>大型</option>
-                        <option value="1" <c:if test="${data.GuiMo==1}">selected</c:if>>中型</option>
-                        <option value="2" <c:if test="${data.GuiMo==2}">selected</c:if>>小型</option>
-                        <option value="3" <c:if test="${data.GuiMo==3}">selected</c:if>>微型</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">企业组织机构代码</label></div>
-                <div class="weui-cell__bd">${data.UnitOrgNum }
-                </div>
-            </div>
-
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">经营范围<font color="red">(*)</font></label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" name="info['JingYingFanWei']" type="text" id="jingyingfanwei"
-                           value="${data.JingYingFanWei }" placeholder="请输入经营范围">
-                </div>
-            </div>
-
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">受让资格陈述</label></div>
-                <div class="weui-cell__bd">
-                    <textarea class="weui-textarea" name="info['ShouRangZiGe']" rows="3">${data.ShouRangZiGe}</textarea>
-                </div>
-            </div>
-
-            <div class="weui-cells__tips">近期资产情况</div>
-            <div class="weui-cells__title">数据来源</div>
-            <div class="weui-cells weui-cells_checkbox">
-                <label class="weui-cell weui-check__label" for="s90">
-                    <div class="weui-cell__hd">
-                        <input type="checkbox" name="checkbox1" class="weui-check jinqi_zichan" id="s90">
-                        <i class="weui-icon-checked"></i>
-                    </div>
-                    <div class="weui-cell__bd">
-                        <p>审计报告</p>
-                    </div>
-                </label>
-                <label class="weui-cell weui-check__label" for="s100">
-                    <div class="weui-cell__hd">
-                        <input type="checkbox" name="checkbox1" class="weui-check jinqi_zichan" id="s100">
-                        <i class="weui-icon-checked"></i>
-                    </div>
-                    <div class="weui-cell__bd">
-                        <p>财务报表</p>
-                    </div>
-                </label>
-            </div>
-
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label for="" class="weui-label">报表日期</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" type="date" name="info['BaoBiaoDate']" value="<%=bbdate%>">
-                </div>
-            </div>
-
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">资产总计（万元）</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" name="info['ZiChanTotal']" type="number" value="${data.ZiChanTotal}"/>
-                </div>
-            </div>
-
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">负债总计（万元）</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" name="info['FuZhaiTotal']" type="number" value="${data.FuZhaiTotal}"/>
-                </div>
-            </div>
-
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">净资产（万元）</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" name="info['JingZiChan']" type="number" value="${data.JingZiChan}"/>
-                </div>
-            </div>
-
-            <div class="weui-cell weui-cell_select weui-cell_select-after">
-                <div class="weui-cell__hd"><label class="weui-label">币种</label></div>
-                <div class="weui-cell__bd">
-                    <select class="weui-select" name="info['MoneyType']">
-                        <c:forEach items="${biZhongs}" var="moneyType">
-                            <option value="${moneyType.code}"
-                                    <c:if test="${moneyType.code eq data.MoneyType}">selected</c:if>>${moneyType.value}</option>
-                        </c:forEach>
-                    </select>
-                </div>
-            </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">企业组织机构代码</td>
+                <td colspan="2">${data.UnitOrgNum }</td>
+                <td class="title">经营规模<font color="red">(*)</font></td>
+                <td colspan="1">
+                    <input
+                            <c:if test="${data.GuiMo==0}">checked</c:if> type="radio" name="info['GuiMo']" value="0"/>大型
+                    <input
+                            <c:if test="${data.GuiMo==1}">checked</c:if> type="radio" name="info['GuiMo']" value="1"/>中型
+                    <input
+                            <c:if test="${data.GuiMo==2}">checked</c:if> type="radio" name="info['GuiMo']" value="2"/>小型
+                    <input
+                            <c:if test="${data.GuiMo==3}">checked</c:if> type="radio" name="info['GuiMo']" value="3"/>微型
+                </td>
+            </tr>
+            <tr>
+                <td class="title">经营范围<font color="red">(*)</font></td>
+                <td colspan="4">
+                    <input class="easyui-textbox" style="height:80px;width: 100%" data-options="multiline:true"
+                           name="info['JingYingFanWei']" id="jingyingfanwei" value="${data.JingYingFanWei }">
+                </td>
+            </tr>
+            <tr>
+                <td class="title">受让资格陈述</td>
+                <td colspan="4">
+                    <input class="easyui-textbox" style=" height:80px;width: 100%" data-options="multiline:true"
+                           name="info['ShouRangZiGe']" value="${data.ShouRangZiGe}">
+                </td>
+            </tr>
+            <tr>
+                <td class="title">近期资产情况</td>
+                <td colspan="5">
+                    <table border="1" width="100%">
+                        <thead>
+                        <tr>
+                            <td class="title">数据来源</td>
+                            <td><input id="s90" type="checkbox" name="checkbox1">审计报告<input id="s100" type="checkbox"
+                                                                                            name="checkbox1">财务报表
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title">报表日期</td>
+                            <td><input class="easyui-datebox" type="text" name="info['BaoBiaoDate']" value="<%=bbdate %>"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title">币种</td>
+                            <td>
+                                <select class="easyui-combobox" style="width: 50%" name="info['MoneyType']">
+                                    <c:forEach items="${biZhongs}" var="moneyType">
+                                        <option value="${moneyType.code}"
+                                                <c:if test="${moneyType.code eq data.MoneyType}">selected</c:if>>${moneyType.value}</option>
+                                    </c:forEach>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title">资产情况</td>
+                            <td> 资产总计:<input type="easyui-textbox" name="info['ZiChanTotal']" value="${data.ZiChanTotal}">(万元);
+                                负债总计:<input type="easyui-textbox" name="info['FuZhaiTotal']" value="${data.FuZhaiTotal}">(万元);
+                                净资产:<input type="easyui-textbox" name="info['JingZiChan']" value="${data.JingZiChan}">(万元)
+                            </td>
+                        </tr>
+                        </thead>
+                    </table>
+                </td>
+            </tr>
             <!-- 单位信息 end -->
         </c:if>
+        <c:if test="${user_type==1 }">
+            <!-- 个人会员信息 begin -->
+            <tr>
+                <td class="title" rowspan="6" id="row_geren">基本情况</td>
+                <td class="title">受让方名称</td>
+                <td colspan="2">${data.DanWeiName }</td>
+                <td class="title">所在地区<font color="red">(*)</font></td>
+                <td colspan="1" id="area">${data.AreaName }</td>
+            </tr>
 
-        <div class="weui-cell weui-cell_select weui-cell_select-after">
-            <div class="weui-cell__hd"><label class="weui-label">是否标的公司原股东<font color="red">(*)</font></label></div>
-            <div class="weui-cell__bd">
-                <select class="weui-select" name="info['hasPriority']">
-                    <option value="0" <c:if test="${data.hasPriority=='0'}">selected</c:if>>否</option>
-                    <option value="1" <c:if test="${data.hasPriority=='1'}">selected</c:if>>是</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="weui-cells__title">受让意愿</div>
-
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">受让底价(万元)<font color="red">(*)</font></label></div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" name="info['ShouRangDiJia']" type="zb" id="shourangdijia"
-                       value="${data.ShouRangDiJia }" placeholder="请输入受让底价"/>
-            </div>
-        </div>
-
-        <div class="weui-cell weui-cell_select weui-cell_select-after">
-            <div class="weui-cell__hd"><label class="weui-label">币种</label></div>
-            <div class="weui-cell__bd">
-                <select class="weui-select" name="info['ShouRangBiZhong']">
+            <tr>
+                <td colspan="5"><input name="info['IsManagerLayer']" type="checkbox" id="managerLayer_geren"
+                                       <c:if test="${data.IsManagerLayer=='1'}">checked</c:if>>标的企业管理层直接或间接出资
+                </td>
+            </tr>
+            <tr id="zhiwu_div" style="display: none;">
+                <td class="title">职务<font color="red">(*)</font></td>
+                <td colspan="2">
+                    <input class="easyui-textbox" name="info['ZhiWu']" type="text" id="zhi_wu" value="${data.ZhiWu }" placeholder="请输入职务"/>
+                </td>
+                <td class="title">是否进行了经济责任审计<font color="red">(*)</font></td>
+                <td colspan="1" >
+                    <input type="radio" value="1" name="info['hasAudit']" <c:if test="${empty data.hasAudit or data.hasAudit=='1'}">checked="true"</c:if>>是
+                    <input type="radio" value="0" name="info['hasAudit']" <c:if test="${data.hasAudit=='0'}">checked="true"</c:if>>否
+                </td>
+            </tr>
+            <tr>
+                <td class="title">证件名称</td>
+                <td colspan="2"><input class="easyui-textbox" name="info['ZhengName']" type="text"
+                                       value="${data.ZhengName }"/></td>
+                <td class="title">证件号码<font color="red">(*)</font></td>
+                <td colspan="1"><input class="easyui-textbox" name="info['ZhengNo']" type="text" id="zheng_No"
+                                       value="${data.ZhengNo }"/></td>
+            </tr>
+            <tr>
+                <td class="title">工作单位</td>
+                <td colspan="4"> <input class="easyui-textbox" name="info['GongZuoDanWei']" type="text" value="${data.GongZuoDanWei }"/></td>
+            </tr>
+            <tr>
+                <td class="title">资金来源</td>
+                <td colspan="4">
+                    <input type="radio" value="0" name="info['ZiJinLaiYuan']" <c:if test="${data.ZiJinLaiYuan=='0'}">checked="true"</c:if>>自有
+                    <input type="radio" value="1" name="info['ZiJinLaiYuan']" <c:if test="${data.ZiJinLaiYuan=='1'}">checked="true"</c:if>>融资
+                    <input type="radio" value="2" name="info['ZiJinLaiYuan']" <c:if test="${data.ZiJinLaiYuan=='2'}">checked="true"</c:if>>其他
+                </td>
+            </tr>
+            <tr>
+                <td class="title">个人资产申报</td>
+                <td colspan="4">
+                    <input class="easyui-textbox" style="width:100%; height:80px;" data-options="multiline:true"  name="info['GeRenZiChan']" value="${data.GeRenZiChan }">
+                </td>
+            </tr>
+            <!-- 个人会员信息 end -->
+        </c:if>
+        <tr>
+            <td class="title">是否标的公司原股东<font color="red">(*)</font></td>
+            <td colspan="5">
+                <input
+                        <c:if test="${empty data.hasPriority or data.hasPriority=='1'}">checked</c:if> type="radio" name="info['hasPriority']"
+                        value="1"/>是
+                <input
+                        <c:if test="${data.hasPriority=='0'}">checked</c:if> type="radio" name="info['hasPriority']"
+                        value="0"/>否${data.hasPriority}
+            </td>
+        </tr>
+        <tr>
+            <td class="title">受让意愿<font color="red">(*)</font></td>
+            <td colspan="5">
+                受让底价(万元)<input type="easyui-textbox" name="info['ShouRangDiJia']" id="shourangdijia"
+                               value="${data.ShouRangDiJia}">
+                <select class="" name="info['ShouRangBiZhong']">
                     <c:forEach items="${biZhongs}" var="shouRangBiZhong">
                         <option value="${shouRangBiZhong.code}"
                                 <c:if test="${shouRangBiZhong.code eq data.ShouRangBiZhong}">selected</c:if>>${shouRangBiZhong.value}</option>
-                    </c:forEach>
-                </select>
-            </div>
-        </div>
-
-        <div class="weui-cell" id="shou_RangPercent">
-            <div class="weui-cell__hd"><label class="weui-label">拟受让比例(%)<font color="red">(*)</font></label></div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" name="info['ShouRangPercent']" type="zb" id="srf_srp"
-                       value="${data.ShouRangPercent }" placeholder="请输入拟受让比例"/>
-            </div>
-        </div>
-
-        <div class="weui-cell" id="shou_RangGuFen">
-            <div class="weui-cell__hd"><label class="weui-label">拟受让股份(股)<font color="red">(*)</font></label></div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" name="info['ShouRangGuFen']" type="zb" id="srf_srgf"
-                       value="${data.ShouRangGuFen }"/>
-            </div>
-        </div>
-
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">联系人<font color="red">(*)</font></label></div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" name="info['LianXiUser']" id="lianxiren" value="${data.LianXiUser }"
-                       placeholder="请输入联系人">
-            </div>
-        </div>
-
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">联系电话<font color="red">(*)</font></label></div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" type="number" name="info['LianXiTel']" id="lianxidianhua"
-                       value="${data.LianXiTel }" placeholder="请输入联系电话">
-            </div>
-        </div>
-
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">电子邮箱</label></div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" name="info['Email']" value="${data.Email }" placeholder="请输入电子邮箱">
-            </div>
-        </div>
-
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">传真号码</label></div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" name="info['ChuanZhen']" value="${data.ChuanZhen }" placeholder="请输入传真号码">
-            </div>
-        </div>
-
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">资信证明</label></div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" name="info['ZiXinZhengMing']" value="${data.ZiXinZhengMing }"
-                       readonly="readonly">
-            </div>
-        </div>
-
-
-        <div class="weui-cells__tips">委托会员</div>
-        <div class="weui-cell weui-cell_access" id="pj_sign_hyjg">
-            <div class="weui-cell__hd"><label class="weui-label">机构名称</label></div>
-            <div class="weui-cell__bd">
-                <p id="sshyjh_value_div" align="left">${data.BelongDLJGName }</p>
-            </div>
-            <div class="weui-cell__ft" style="font-size: 0">
-                <span></span>
-            </div>
-        </div>
-
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">工位号</label></div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" name="info['GongWeiNo']" value="${data.GongWeiNo }" placeholder="请输入工位号">
-            </div>
-        </div>
-
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">经纪人</label></div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" name="info['JingJiRen']" value="${data.JingJiRen }" placeholder="请输入经纪人">
-            </div>
-        </div>
-
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">经纪人编码</label></div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" name="info['JingJiRenCode']" value="${data.JingJiRenCode }"
-                       placeholder="请输入经纪人编码">
-            </div>
-        </div>
-
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">联系人</label></div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" name="info['LianXiRen']" value="${data.LianXiRen }" placeholder="请输入联系人">
-            </div>
-        </div>
-
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">联系电话</label></div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" type="number" name="info['JGLianXiTel']" value="${data.JGLianXiTel }"
-                       placeholder="请输入联系电话">
-            </div>
-        </div>
-
-        <div class="weui-cells__tips">联合受让方</div>
-        <div class="weui-cells weui-cells_form" id="union_div">
-            <table class="table" width="100%">
-                <tbody>
-                <tr>
-                    <td height="50" width="70" align="center">序号</td>
-                    <td>联合受让方名称</td>
-                    <c:if test="${data.ZhuanRangType=='1'}">
-                        <td align="center" width="120">拟受让比例（%）</td>
-                    </c:if>
-                    <c:if test="${data.ZhuanRangType=='2'}">
-                        <td align="center" width="120">拟受让股份（股）</td>
-                    </c:if>
-                </tr>
-                <c:forEach items="${data.unionList}" var="union" varStatus="vs">
-                    <tr class="ios_menu">
-                        <td height="30" height="30" align="center">${vs.index+1 }</td>
-                        <td>${union.ShouRangName}</td>
-                        <c:if test="${data.ZhuanRangType=='1'}">
-                            <td class="zhuanRang_value" align="center">${union.ShouRangPercent }</td>
-                        </c:if>
-                        <c:if test="${data.ZhuanRangType=='2'}">
-                            <td class="zhuanRang_value" align="center">${union.ShouRangGufen }</td>
-                        </c:if>
-                    </tr>
-                    <input type="hidden" value="${union.RowGuid}">
-                </c:forEach>
-                </tbody>
-            </table>
-        </div>
-        <div class="weui-btn-area">
-            <a class="weui-btn weui-btn_primary" href="javascript:" id="btn_add">新增联合受让方</a>
-        </div>
-
-        <input type="hidden" id="union_waiting_handle" value="">
-        <div class="weui-cells__title">相关附件</div>
-
-        <c:forEach items="${filelist}" var="file">
-
-            <div class="weui-cell weui-cell_vcode">
-                <div class="weui-cell__hd">
-                    <label class="weui-label">${file.FileName} <c:if
-                            test="${file.IsMustNeed eq '1' and data.IsBMNeedFile eq '1' }"><font
-                            color="red">(*)</font></c:if></label>
-                </div>
-                <div class="weui-cell__bd" name="init_files" id="${file.FileCode}" need="${file.IsMustNeed}">
-
-
-                </div>
-                <div class="weui-cell__ft">
-                    <a class="weui-vcode-btn" name="file_div" code="${file.FileCode}">文件管理</a>
-                </div>
-            </div>
-
-        </c:forEach>
-    </div>
+                    </c:forEach></select>
+                ;<span id="shou_RangPercent">拟受让比例<input type="easyui-textbox" name="info['ShouRangPercent']" id="srf_srp"
+                                                         value="${data.ShouRangPercent }">%</span>
+                <span id="shou_RangGuFen">拟受让比例<input type="easyui-textbox" name="info['ShouRangGuFen']" id="srf_srgf"
+                                                      value="${data.ShouRangGuFen }"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">联系人<font color="red">(*)</font></td>
+            <td colspan="3"><input type="easyui-textbox" name="info['LianXiUser']" id="lianxiren"
+                                   value="${data.LianXiUser }" data-options="required:true"></td>
+            <td class="title">联系电话<font color="red">(*)</font></td>
+            <td colspan="2"><input type="easyui-textbox" name="info['LianXiTel']" id="lianxidianhua"
+                                   value="${data.LianXiTel }" data-options="required:true"></td>
+        </tr>
+        <tr>
+            <td class="title">电子邮箱</td>
+            <td colspan="3">
+                <input class="easyui-textbox" name="info['Email']" value="${data.Email }">
+            </td>
+            <td class="title">传真号码</td>
+            <td colspan="2"><input class="easyui-textbox" name="info['ChuanZhen']" value="${data.ChuanZhen }">
+            </td>
+        </tr>
+        <tr>
+            <td class="title">资信证明</td>
+            <td colspan="5"><input style="width: 100%" class="easyui-textbox" name="info['ZiXinZhengMing']"
+                                   value="${data.ZiXinZhengMing }" readonly="readonly">
+            </td>
+        </tr>
+        <tr>
+            <td class="title" rowspan="3">委托会员</td>
+            <td class="title">机构名称</td>
+            <td colspan="2">
+                ${data.BelongDLJGName }
+            </td>
+            <td class="title">工位号</td>
+            <td colspan="1">
+                <input class="easyui-textbox" name="info['GongWeiNo']" value="${data.GongWeiNo }">
+            </td>
+        </tr>
+        <tr>
+            <td class="title">经纪人</td>
+            <td colspan="2">
+                <input class="weui-textbox" name="info['JingJiRen']" value="${data.JingJiRen }"/>
+            </td>
+            <td class="title">经纪人编码</td>
+            <td colspan="1">
+                <input class="weui-textbox" name="info['JingJiRenCode']" value="${data.JingJiRenCode }"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">联系人</td>
+            <td colspan="2">
+                <input class="weui-textbox" name="info['LianXiRen']" value="${data.LianXiRen }"/>
+            </td>
+            <td class="title">联系电话</td>
+            <td colspan="1">
+                <input class="weui-textbox" name="info['JGLianXiTel']" value="${data.JGLianXiTel }"/>
+            </td>
+        </tr>
+        </thead>
+    </table>
 </form>
-<div class="weui-btn-area">
-    <a class="weui-btn weui-btn_primary" href="javascript:" id="btn_save">确定</a>
-</div>
 
 <!--新增联合受让方dialog start-->
 <div class="js_dialog" id="union_select_div" style="display: none;">
