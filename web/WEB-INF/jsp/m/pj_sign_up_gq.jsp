@@ -386,6 +386,7 @@
                 setTimeout(function () {
                     $("#srf_js_tooltips").css('display', 'none');
                 }, 3000);
+                alert( $("#srf_js_tooltips").text());
                 return false;
             }
 
@@ -791,7 +792,10 @@
 <header class="h43">
     <div class="index-header">
         <a href="pj_list_cqjy" class="back"></a>
-        <div class="title">项目报名</div>
+        <div class="title">
+            <a id="btn_save" class="easyui-linkbutton c1" style="width:80px" >下一步</a>
+            <a  class="easyui-linkbutton c2" style="width:120px">新增联合受让方</a>
+            项目报名</div>
         <a href="javascript:showRule1();" class="h-r"><i class="glyphicon glyphicon-filter"></i></a>
     </div>
 </header>
@@ -809,7 +813,6 @@
     }
 
 </style>
-<h4>报名详情</h4>
 <div style="margin:5px 0;"></div>
 
 
@@ -1150,7 +1153,7 @@
             <tr id="zhiwu_div" style="display: none;">
                 <td class="title">职务<font color="red">(*)</font></td>
                 <td colspan="2">
-                    <input class="easyui-textbox" name="info['ZhiWu']" type="text" id="zhi_wu" value="${data.ZhiWu }" placeholder="请输入职务"/>
+                    <input class="easyui-textbox" name="info['ZhiWu']" type="text" id="zhi_wu" value="${data.ZhiWu }" placeholder="请输入职务" data-options="required:true"/>
                 </td>
                 <td class="title">是否进行了经济责任审计<font color="red">(*)</font></td>
                 <td colspan="1" >
@@ -1183,7 +1186,7 @@
             <tr>
                 <td class="title">所属行业<font color="red">(*)</font></td>
                 <td colspan="4">
-                    <select class="easyui-combobox" name="info['HangYeTypeCode']" style="width:50%;" id="hangYeType_code">
+                    <select class="easyui-combobox" name="info['HangYeTypeCode']" style="width:50%;" id="hangYeType_code" data-options="required:true">
                         <c:forEach items="${hangYeTypes}" var="hangYeType">
                             <option value="${hangYeType.code}"
                                     <c:if test="${hangYeType.code eq data.HangYeTypeCode}">selected</c:if>>${hangYeType.value}</option>
@@ -1208,7 +1211,7 @@
             <tr>
                 <td class="title">公司类型(经济性质)<font color="red">(*)</font></td>
                 <td colspan="2">
-                    <select class="easyui-combobox" style="width: 50%" name="info['CompanyLeiXing']">
+                    <select class="easyui-combobox" style="width: 50%" name="info['CompanyLeiXing']" data-options="required:true">
                         <c:forEach items="${companyLeiXings}" var="companyLeiXing">
                             <option value="${companyLeiXing.code}"
                                     <c:if test="${companyLeiXing.code eq data.CompanyLeiXing}">selected</c:if>>${companyLeiXing.value}</option>
@@ -1217,7 +1220,7 @@
                 </td>
                 <td class="title">企业性质(经济类型)<font color="red">(*)</font></td>
                 <td colspan="1">
-                    <select class="easyui-combobox" style="width: 50%" name="info['CompanyXingZhi']">
+                    <select class="easyui-combobox" style="width: 50%" name="info['CompanyXingZhi']" data-options="required:true">
                         <c:forEach items="${companyXingZhis}" var="companyXingZhi">
                             <option value="${companyXingZhi.code}"
                                     <c:if test="${companyXingZhi.code eq data.CompanyXingZhi}">selected</c:if>>${companyXingZhi.value}</option>
@@ -1243,7 +1246,7 @@
             <tr>
                 <td class="title">经营范围<font color="red">(*)</font></td>
                 <td colspan="4">
-                    <input class="easyui-textbox" style="height:80px;width: 100%" data-options="multiline:true"
+                    <input class="easyui-textbox" style="height:80px;width: 100%" data-options="multiline:true,required:true"
                            name="info['JingYingFanWei']" id="jingyingfanwei" value="${data.JingYingFanWei }">
                 </td>
             </tr>
@@ -1312,7 +1315,7 @@
             <tr id="zhiwu_div" style="display: none;">
                 <td class="title">职务<font color="red">(*)</font></td>
                 <td colspan="2">
-                    <input class="easyui-textbox" name="info['ZhiWu']" type="text" id="zhi_wu" value="${data.ZhiWu }" placeholder="请输入职务"/>
+                    <input class="easyui-textbox" name="info['ZhiWu']" type="text" id="zhi_wu" value="${data.ZhiWu }" placeholder="请输入职务" data-options="required:true"/>
                 </td>
                 <td class="title">是否进行了经济责任审计<font color="red">(*)</font></td>
                 <td colspan="1" >
@@ -1326,7 +1329,7 @@
                                        value="${data.ZhengName }"/></td>
                 <td class="title">证件号码<font color="red">(*)</font></td>
                 <td colspan="1"><input class="easyui-textbox" name="info['ZhengNo']" type="text" id="zheng_No"
-                                       value="${data.ZhengNo }"/></td>
+                                       value="${data.ZhengNo }" data-options="required:true"/></td>
             </tr>
             <tr>
                 <td class="title">工作单位</td>
@@ -1362,16 +1365,16 @@
         <tr>
             <td class="title">受让意愿<font color="red">(*)</font></td>
             <td colspan="5">
-                受让底价(万元)<input type="easyui-textbox" name="info['ShouRangDiJia']" id="shourangdijia"
+                受让底价(万元)<input type="easyui-textbox" name="info['ShouRangDiJia']" id="shourangdijia" data-options="required:true"
                                value="${data.ShouRangDiJia}">
                 <select class="" name="info['ShouRangBiZhong']">
                     <c:forEach items="${biZhongs}" var="shouRangBiZhong">
                         <option value="${shouRangBiZhong.code}"
                                 <c:if test="${shouRangBiZhong.code eq data.ShouRangBiZhong}">selected</c:if>>${shouRangBiZhong.value}</option>
                     </c:forEach></select>
-                ;<span id="shou_RangPercent">拟受让比例<input type="easyui-textbox" name="info['ShouRangPercent']" id="srf_srp"
+                ;<span id="shou_RangPercent">拟受让比例<input type="easyui-textbox" name="info['ShouRangPercent']" id="srf_srp" data-options="required:true"
                                                          value="${data.ShouRangPercent }">%</span>
-                <span id="shou_RangGuFen">拟受让比例<input type="easyui-textbox" name="info['ShouRangGuFen']" id="srf_srgf"
+                <span id="shou_RangGuFen">拟受让比例<input type="easyui-textbox" name="info['ShouRangGuFen']" id="srf_srgf" data-options="required:true"
                                                       value="${data.ShouRangGuFen }"></span>
             </td>
         </tr>
@@ -1429,8 +1432,56 @@
                 <input class="weui-textbox" name="info['JGLianXiTel']" value="${data.JGLianXiTel }"/>
             </td>
         </tr>
+        <tr>
+            <td class="title" >相关附件</td>
+            <td colspan="5">
+                <table border="1px" width="100%">
+                    <tbody>
+                    <tr>
+                        <td class="title" align="center">电子件名称</td>
+                        <td class="title" align="center">电子件列表(点击查看)</td>
+                    </tr>
+                    <c:forEach items="${filelist}" var="file">
+                        <tr>
+                            <td align="center">${file.FileName}</td>
+                            <td align="center" id="${file.FileCode}" need="${file.IsMustNeed}"></td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
         </thead>
     </table>
+    <br>
+    <table  width="100%" border="1px">
+        <tbody>
+        <tr>
+            <td  width="10%" align="center" class="title">序号</td>
+            <td class="title" width="45%" align="center">联合受让方名称</td>
+            <c:if test="${data.ZhuanRangType=='1'}">
+                <td align="center"  width="45%" class="title">拟受让比例（%）</td>
+            </c:if>
+            <c:if test="${data.ZhuanRangType=='2'}">
+                <td align="center"  width="45%" class="title">拟受让股份（股）</td>
+            </c:if>
+        </tr>
+        <c:forEach items="${data.unionList}" var="union" varStatus="vs">
+            <tr>
+                <td  align="center">${vs.index+1 }</td>
+                <td align="center">${union.ShouRangName}</td>
+                <c:if test="${data.ZhuanRangType=='1'}">
+                    <td  align="center">${union.ShouRangPercent }</td>
+                </c:if>
+                <c:if test="${data.ZhuanRangType=='2'}">
+                    <td align="center">${union.ShouRangGufen }</td>
+                </c:if>
+            </tr>
+            <input type="hidden" value="${union.RowGuid}">
+        </c:forEach>
+        </tbody>
+    </table>
+    <div style="height: 80px"></div>
 </form>
 
 <!--新增联合受让方dialog start-->
