@@ -516,7 +516,7 @@ if(obj!=null){
 }
 
 %>
-<%--<c:if test="${data.WorkFlowInfo.wfIsBtnTdShow=='1' }">--%>
+<%--<c:if testWebService="${data.WorkFlowInfo.wfIsBtnTdShow=='1' }">--%>
 
 <a href="javascript:printHZ('${params.RowGuid }','nmg')" class="weui-btn weui-btn_mini weui-btn_primary">打印报名回执</a>
 

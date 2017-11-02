@@ -246,7 +246,7 @@
                         <div class="smc clearfix">
                             <div class="qr-code">
                                 <%--<c:choose>--%>
-                                <%--<c:when test="${mediainfo.d3 != null && mediainfo.d3 != ''}"><!--全景不为空,二维码中写入全景地址-->--%>
+                                <%--<c:when testWebService="${mediainfo.d3 != null && mediainfo.d3 != ''}"><!--全景不为空,二维码中写入全景地址-->--%>
                                 <%--<img src="http://qr.topscan.com/api.php?text=${mediainfo.d3}&w=120&m=5" width="120" height="120" class="dsb"/>--%>
                                 <%--</c:when>--%>
                                 <%--<c:otherwise>--%>
@@ -594,10 +594,10 @@
                        class='ejy_huiyuan_bm active'>${news.status_name}<br>
                         成交价:${ChengJiaoPrice}元
                         <%--<c:choose>--%>
-                            <%--<c:when test="${news.allowMoreJqxt eq '1' and not empty his_erci}">--%>
+                            <%--<c:when testWebService="${news.allowMoreJqxt eq '1' and not empty his_erci}">--%>
                                 <%--${his_erci.get(0).price}元--%>
                             <%--</c:when>--%>
-                            <%--<c:when test="${not empty his}">--%>
+                            <%--<c:when testWebService="${not empty his}">--%>
                                 <%--${his.get(0).price}元--%>
                             <%--</c:when>--%>
                             <%--<c:otherwise>--%>

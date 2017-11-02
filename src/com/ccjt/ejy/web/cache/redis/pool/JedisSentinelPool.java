@@ -134,7 +134,7 @@ public final class JedisSentinelPool extends JedisPool {
 		}
 	}
 
-	// for test
+	// for testWebService
 	public MasterSwitchListener getMasterSwitchListener() {
 		return masterSwitchListener;
 	}

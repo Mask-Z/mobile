@@ -323,7 +323,7 @@
                         <div class="smc clearfix">
                             <div class="qr-code">
                                 <%--<c:choose>--%>
-                                    <%--<c:when test="${mediainfo.d3 != null && mediainfo.d3 != ''}"><!--全景不为空,二维码中写入全景地址-->--%>
+                                    <%--<c:when testWebService="${mediainfo.d3 != null && mediainfo.d3 != ''}"><!--全景不为空,二维码中写入全景地址-->--%>
                                         <%--<img src="http://qr.topscan.com/api.php?text=${mediainfo.d3}&w=120&m=5" width="120" height="120" class="dsb"/>--%>
                                     <%--</c:when>--%>
                                     <%--<c:otherwise>--%>
@@ -483,10 +483,10 @@
                     <div class="c5-11"><a style="color: #fff;" id="" class="ejy_huiyuan_bm none">此项目已中止,暂时无法报名<br/>中止时间:${fn:substring(zzList.get(0).gonggaofromdate,0,19)}</a>
                         </c:if>
 
-                            <%--<c:if test="${empty gonggaostatue or gonggaostatue == 0}">--%>
+                            <%--<c:if testWebService="${empty gonggaostatue or gonggaostatue == 0}">--%>
                             <c:if test="${empty gonggaostatue or (gonggaostatue != 1 and gonggaostatue !=2)}">
                                 <c:choose>
-                                    <%--<c:when test="${news.status==1 }">--%>
+                                    <%--<c:when testWebService="${news.status==1 }">--%>
                                     <c:when test="${news.gonggaotodate.after(nowDate) and (news.status eq 1 or news.status eq 4)}">
                                         <div class="c5-11">
                                             <a style="color: #fff;" id='${news.project_no }' class='<c:choose><c:when test="${couldSign=='true'}">ejy_huiyuan_bm</c:when><c:otherwise>none</c:otherwise></c:choose> '

@@ -776,7 +776,7 @@ if(obj!=null){
 	}
 }
 %>
-<%--<c:if test="${data.WorkFlowInfo.wfIsBtnTdShow=='1'&&auditStatus.AuditStatus=='3' }">--%>
+<%--<c:if testWebService="${data.WorkFlowInfo.wfIsBtnTdShow=='1'&&auditStatus.AuditStatus=='3' }">--%>
 <c:if test="${auditStatus.AuditStatus=='3' }">
     <a href="javascript:printHZ('${params.RowGuid }','gq')" class="weui-btn weui-btn_mini weui-btn_primary">打印回执</a>
 </c:if>

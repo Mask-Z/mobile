@@ -20,7 +20,7 @@ public class HttpclientTest {
 //	/**
 //	 * 短信
 //	 */
-//	public void test() {
+//	public void testWebService() {
 //		Paramater p = new Paramater();
 //		p.setType("sendMsg");
 //		Map<String,String> data = new HashMap<String,String>();

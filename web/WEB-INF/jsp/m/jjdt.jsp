@@ -84,12 +84,12 @@
                         <span class="mb5 dsb">标的所在地</span>
                         <select class="form-control input input-sm " name="sheng" id="sheng">
                             <option value=""
-                            <%--<c:if test="${empty sheng}">selected</c:if> >全部--%>
+                            <%--<c:if testWebService="${empty sheng}">selected</c:if> >全部--%>
                                     selected>全部
                             </option>
                             <c:forEach items="${cityinfo}" var="city">
                                 <option value="${city.code}"
-                                    <%--<c:if test="${sheng==city.name}">selected</c:if>>${city.name}</option>--%>
+                                    <%--<c:if testWebService="${sheng==city.name}">selected</c:if>>${city.name}</option>--%>
                                 >${city.name}</option>
                             </c:forEach>
                         </select>
