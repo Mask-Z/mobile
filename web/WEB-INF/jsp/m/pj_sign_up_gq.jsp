@@ -794,7 +794,8 @@
         <a href="pj_list_cqjy" class="back"></a>
         <div class="title">
             <a id="btn_save" class="easyui-linkbutton c1" style="width:80px" >下一步</a>
-            <a  class="easyui-linkbutton c2" style="width:120px">新增联合受让方</a>
+            <%--<a  class="easyui-linkbutton c2" style="width:120px">新增联合受让方</a>--%>
+            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#dlg_lhsr').dialog('open')">新增联合受让方</a>
             项目报名</div>
         <a href="javascript:showRule1();" class="h-r"><i class="glyphicon glyphicon-filter"></i></a>
     </div>
@@ -815,7 +816,133 @@
 </style>
 <div style="margin:5px 0;"></div>
 
+<div id="dlg_lhsr" class="easyui-dialog" title="新增联合受让方" data-options="iconCls:'icon-save',closed:true" style="width:800px;height:600px;padding:10px">
+    <div>
+        <a href="javascript:void(0)" class="easyui-linkbutton" >修改保存</a>
+        <span style="float: right"><font color="red">注意:信息录入完成后,请务必要点击左侧的[修改保存]按钮!</font></span>
+    </div>
+    <form id="addLHSR">
 
+                <input type="hidden" id="union_baoMing_guid" name="info['baoMingGuid']" value="${data.RowGuid }">
+                <!-- 联合受让方报名统一标识 -->
+                <input type="hidden" id="shouRang_guid" name="info['shouRangGuid']" value="">
+                <input type="hidden" id="union_row_guid" name="info['rowGuid']" value=""><!-- 联合受让方唯一标识 -->
+                <input type="hidden" name="info['zhuanRangType']" value="${data.ZhuanRangType }"><!-- 转让方式 -->
+                <input type="hidden" name="info['unionType']" id="union_type" value=""><!-- 转让方式 -->
+
+                <table class="myform" title="报名详情" style="width:100%;height:250px" border="1">
+                    <thead>
+                    <tr>
+                        <td class="title">受让方名称<font color="red">(*)</font></td>
+                        <td colspan="2">
+                            <input class="easyui-textbox" type="text" style="width: 80%" id="srfmc" name="info['shouRangName']"  data-options="required:true" readonly/>
+                            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#dlg_js').dialog('open')">检索</a>
+                        </td>
+                        <td class="title">受让方类型</td>
+                        <td colspan="2">
+                            <input type="radio" value="1" name="info['shouRangRenType']" >法人
+                            <input type="radio" value="2" name="info['shouRangRenType']" >自然人
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">受让比例(%)<font color="red">(*)</font></td>
+                        <td colspan="2"> <input class="easyui-textbox" type="text" name="info['shouRangPercent']" style="width: 90%" data-options="required:true"/>%</td>
+                        <td class="title" style="display: none">受让股份(股)<font color="red">(*)</font></td>
+                        <td colspan="2" style="display: none"> <input class="easyui-textbox" style="width: 100%" type="text" name="info['shouRangGuFen']" data-options="required:true"/></td>
+                        <td class="title"></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td class="title">联系人姓名</td>
+                        <td colspan="2"> <input class="easyui-textbox" type="text" name="info['lianXiName']" style="width: 100%"/></td>
+                        <td class="title">联系人电话</td>
+                        <td colspan="2"><input class="easyui-textbox" type="text" name="info['lianXiTel']" style="width: 100%"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title">联系人邮件</td>
+                        <td colspan="2"><input class="easyui-textbox" type="text" name="info['lianXiEmail']" style="width: 100%"/></td>
+                        <td class="title">联系人传真</td>
+                        <td colspan="2"><input class="easyui-textbox" type="text" name="info['lianXiFax']" style="width: 100%"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title">委托会员单位名称</td>
+                        <td colspan="2"><input class="easyui-textbox" type="text" name="info['weiTuoDWName']" style="width: 100%"/></td>
+                        <td class="title">委托会员联系人电话</td>
+                        <td colspan="2"><input class="easyui-textbox" type="text" name="info['weiTuoDWLianXiTel']" style="width: 100%"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title">委托会员核实意见</td>
+                        <td colspan="4">
+                            <input class="easyui-textbox" style="height:80px;width: 100%" data-options="multiline:true"
+                                   name="info['weiTuoHYHeShi']" >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">委托会员工位号</td>
+                        <td colspan="2"><input class="easyui-textbox" type="text" name="info['weiTuoHYNo']" style="width: 100%"/></td>
+                        <td class="title">委托会员经纪人</td>
+                        <td colspan="2"><input class="easyui-textbox" type="text" name="info['weiTuoHYName']" style="width: 100%"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title">委托会员经纪人编码</td>
+                        <td colspan="2"><input class="easyui-textbox" type="text" name="info['weiTuoHYCode']" style="width: 100%"/></td>
+                        <td class="title">委托会员联系人</td>
+                        <td colspan="2"><input class="easyui-textbox" type="text" name="info['weiTuoHYLianXiName']" style="width: 100%"/></td>
+                    </tr>
+                    </thead>
+                </table>
+
+            </form>
+</div>
+<div id="dlg_js" class="easyui-dialog" title="竞买方列表" data-options="iconCls:'icon-save',closed:true" style="width:600px;height:400px;padding:10px">
+    <table class="myform">
+        <tr>
+            <td class="title">竞买方</td>
+            <td  colspan="2"><input class="easyui-textbox" type="text"  style="width: 95%" id="jmf"/></td>
+            <td class="title">组织机构代码</td>
+            <td  colspan="2"><input class="easyui-textbox" type="text"  style="width: 95%" id="zzjgdm"/></td>
+        </tr>
+    </table>
+    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="getjmfList()">搜索</a>
+    <table id="jmfList_table"  >
+    </table>
+</div>
+<script>
+        var projectGuid='${ProjectGuid}';
+        var rowGuid='${data.RowGuid}';
+        var type='0';
+        function getjmfList() {
+            var  jmf=$('#jmf').val();
+            var  zzjgdm=$('#zzjgdm').val();
+             $('#jmfList_table').datagrid({
+            url:"get_srf_list",
+            queryParams: { 'projectGuid': projectGuid ,'rowGuid':rowGuid,'srfNameOrUnitCode':jmf,'type':type },
+            pageList:[15,20,30,40,50],
+            columns:[[
+                {field:'id',title:'全选',checkbox:true},
+                {field:'xuhao',title:'序号',width:80,align:'left'},
+                {field:'DanWeiName',title:'竞买方',width:80,align:'left'},
+                {field:'UnitOrgNum',title:'组织机构代码',width:80,align:'left'},
+                {field:'operation',title:'操作',width:80,align:'center',
+                    formatter: function(value,row,index){
+                        var str = "";
+                        str += '<a href="javascript:;" style="color: green" onClick = "jmfSelect(\''+row.DanWeiName+'\')">选择</a>';
+                        return str;
+                    }
+                }
+            ]]
+        });
+    };
+
+    function jmfSelect(DanWeiName) {
+        if (DanWeiName!=''){
+            $("#srfmc").textbox({required:false});
+        }
+        $('#srfmc').textbox('setValue',DanWeiName);
+        $("#dlg_js").dialog('close');
+    }
+
+</script>
 <!--
 <table id="table" style="height:100%;width: 100%;" data-options="">
     <thead>
@@ -1440,11 +1567,13 @@
                     <tr>
                         <td class="title" align="center">电子件名称</td>
                         <td class="title" align="center">电子件列表(点击查看)</td>
+                        <td class="title" align="center">管理</td>
                     </tr>
                     <c:forEach items="${filelist}" var="file">
                         <tr>
                             <td align="center">${file.FileName}</td>
-                            <td align="center" id="${file.FileCode}" need="${file.IsMustNeed}"></td>
+                            <td align="center"></td>
+                            <td align="center" id="${file.FileCode}" need="${file.IsMustNeed}"><a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#dlg').dialog('open')">文件管理</a></td>
                         </tr>
                     </c:forEach>
                     </tbody>
@@ -1453,6 +1582,13 @@
         </tr>
         </thead>
     </table>
+    <div id="dlg" class="easyui-dialog" title="请选择上传文件" data-options="iconCls:'icon-save',closed:true" style="width:400px;height:200px;padding:10px">
+        <form id="upform">
+            <input name="fileCode" id="fileCode" type="hidden">
+            <input name="rowGuid" type="hidden" value="${data.RowGuid }">
+            <input id="uploaderInput" name="file" class="weui-uploader__input" type="file" accept="*" multiple/>
+        </form>
+    </div>
     <br>
     <table  width="100%" border="1px">
         <tbody>
@@ -1484,160 +1620,6 @@
     <div style="height: 80px"></div>
 </form>
 
-<!--新增联合受让方dialog start-->
-<div class="js_dialog" id="union_select_div" style="display: none;">
-    <div class="weui-mask"></div>
-    <div class="weui-dialog_srf" style="height:100%;overflow-y:scroll;">
-        <div class="weui-dialog__hd_srf"
-             style="height: 30px;      padding: 10px;  background: #f5f5f5;line-height: 30px;border-bottom: 1px #ddd solid;">
-            <strong class="weui-dialog__title">新增联合受让方</strong></div>
-        <div class="weui-dialog__bd_srf">
-            <form id="pj_gq_addUnion">
-
-                <input type="hidden" id="union_baoMing_guid" name="info['baoMingGuid']" value="${data.RowGuid }">
-                <!-- 联合受让方报名统一标识 -->
-                <input type="hidden" id="shouRang_guid" name="info['shouRangGuid']" value="">
-                <input type="hidden" id="union_row_guid" name="info['rowGuid']" value=""><!-- 联合受让方唯一标识 -->
-                <input type="hidden" name="info['zhuanRangType']" value="${data.ZhuanRangType }"><!-- 转让方式 -->
-                <input type="hidden" name="info['unionType']" id="union_type" value=""><!-- 转让方式 -->
-
-
-                <div class="weui-toptips weui-toptips_warn js_tooltips" id="union_js_tooltips"></div>
-                <div class="weui-cells weui-cells_form" style="margin:0px;">
-
-                    <div class="weui-cell weui-cell_access" id="pj_sign_srf">
-                        <div class="weui-cell__hd"><label class="weui-label">受让方名称<font color="red">(*)</font></label>
-                        </div>
-                        <div class="weui-cell__bd">
-                            <input class="weui-input" name="info['shouRangName']" type="text" id="shouRang_name"
-                                   value="" onfocus="this.blur()"/>
-                        </div>
-                        <div class="weui-cell__ft" style="font-size: 0">
-                            <span></span>
-                        </div>
-                    </div>
-
-                    <div class="weui-cell weui-cell_select weui-cell_select-after">
-                        <div class="weui-cell__hd"><label class="weui-label">受让方类型</label></div>
-                        <div class="weui-cell__bd">
-                            <select class="weui-select" name="info['shouRangRenType']" id="shouRangRen_type">
-                                <option value="1">法人</option>
-                                <option value="2">自然人</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="weui-cell" id="shouRang_percent_div">
-                        <div class="weui-cell__hd"><label class="weui-label">受让比例(%)<font color="red">(*)</font></label>
-                        </div>
-                        <div class="weui-cell__bd">
-                            <input class="weui-input" name="info['shouRangPercent']" type="zb" id="shouRang_percent"
-                                   value=""/>
-                        </div>
-                    </div>
-
-                    <div class="weui-cell" id="shouRang_gufen_div">
-                        <div class="weui-cell__hd"><label class="weui-label">受让股份(股)<font color="red">(*)</font></label>
-                        </div>
-                        <div class="weui-cell__bd">
-                            <input class="weui-input" name="info['shouRangGuFen']" type="zb" id="shouRang_gufen"
-                                   value=""/>
-                        </div>
-                    </div>
-
-                    <div class="weui-cell">
-                        <div class="weui-cell__hd"><label class="weui-label">联系人姓名</label></div>
-                        <div class="weui-cell__bd">
-                            <input class="weui-input" name="info['lianXiName']" type="text" id="lianXi_name" value=""/>
-                        </div>
-                    </div>
-
-                    <div class="weui-cell">
-                        <div class="weui-cell__hd"><label class="weui-label">联系人电话</label></div>
-                        <div class="weui-cell__bd">
-                            <input class="weui-input" name="info['lianXiTel']" type="text" id="lianXi_tel" value=""/>
-                        </div>
-                    </div>
-
-                    <div class="weui-cell">
-                        <div class="weui-cell__hd"><label class="weui-label">联系人邮件</label></div>
-                        <div class="weui-cell__bd">
-                            <input class="weui-input" name="info['lianXiEmail']" type="text" id="lianXi_email"
-                                   value=""/>
-                        </div>
-                    </div>
-
-                    <div class="weui-cell">
-                        <div class="weui-cell__hd"><label class="weui-label">联系人传真</label></div>
-                        <div class="weui-cell__bd">
-                            <input class="weui-input" name="info['lianXiFax']" type="text" id="lianXi_fax" value=""/>
-                        </div>
-                    </div>
-
-                    <div class="weui-cell">
-                        <div class="weui-cell__hd"><label class="weui-label">委托会员单位名称</label></div>
-                        <div class="weui-cell__bd">
-                            <input class="weui-input" name="info['weiTuoDWName']" type="text" id="weiTuoDW_name"
-                                   value=""/>
-                        </div>
-                    </div>
-
-                    <div class="weui-cell">
-                        <div class="weui-cell__hd"><label class="weui-label">委托会员联系人电话</label></div>
-                        <div class="weui-cell__bd">
-                            <input class="weui-input" name="info['weiTuoDWLianXiTel']" type="text"
-                                   id="weiTuoDW_lianXiTel" value=""/>
-                        </div>
-                    </div>
-
-                    <div class="weui-cells__tips">委托会员核实意见</div>
-                    <div class="weui-cell">
-                        <div class="weui-cell__bd">
-                            <textarea class="weui-textarea" name="info['weiTuoHYHeShi']" id="weiTuoHY_heShi"
-                                      rows="3"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="weui-cell">
-                        <div class="weui-cell__hd"><label class="weui-label">委托会员工位号</label></div>
-                        <div class="weui-cell__bd">
-                            <input class="weui-input" name="info['weiTuoHYNo']" type="text" id="weiTuoHY_No" value=""/>
-                        </div>
-                    </div>
-
-                    <div class="weui-cell">
-                        <div class="weui-cell__hd"><label class="weui-label">委托会员经纪人</label></div>
-                        <div class="weui-cell__bd">
-                            <input class="weui-input" name="info['weiTuoHYName']" type="text" id="weiTuoHY_name"
-                                   value=""/>
-                        </div>
-                    </div>
-
-                    <div class="weui-cell">
-                        <div class="weui-cell__hd"><label class="weui-label">委托会员经纪人编码</label></div>
-                        <div class="weui-cell__bd">
-                            <input class="weui-input" name="info['weiTuoHYCode']" type="text" id="weiTuoHY_code"
-                                   value=""/>
-                        </div>
-                    </div>
-
-                    <div class="weui-cell">
-                        <div class="weui-cell__hd"><label class="weui-label">委托会员联系人</label></div>
-                        <div class="weui-cell__bd">
-                            <input class="weui-input" name="info['weiTuoHYLianXiName']" type="text"
-                                   id="weiTuoHY_lianXiName" value=""/>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="weui-btn-area clearfix">
-            <a class="weui-btn weui-btn_default" href="javascript:" id="btn_cancel">取消</a>
-            <a class="weui-btn weui-btn_primary" href="javascript:" id="btn_ok">确定</a>
-        </div>
-    </div>
-</div>
-<!--新增联合受让方dialog end-->
 
 <!--竞买人查询dialog start-->
 <div class="js_dialog" id="srf_select_div" style="display: none;">
@@ -1701,29 +1683,6 @@
 </div>
 
 
-<!-- 附件管理 -->
-<div class="js_dialog" id="file_select_div" style="display: none;height: 400px;">
-    <div class="weui-mask"></div>
-    <div class="weui-dialog">
-        <div class="weui-dialog__hd" style="height:30px"><strong class="weui-dialog__title"
-                                                                 id="file_div_title"></strong></div>
-        <div class="weui-uploader__bd">
-            <div class="weui-uploader__input-box">
-                <form id="upform">
-                    <input name="fileCode" id="fileCode" type="hidden">
-                    <input name="rowGuid" type="hidden" value="${data.RowGuid }">
-                    <input id="uploaderInput" name="file" class="weui-uploader__input" type="file" accept="*" multiple/>
-                </form>
-            </div>
-        </div>
-
-        <div class="weui-dialog__ft">
-            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default" id="close_file_btn">关闭</a>
-            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" id="submit_file_btn">上传</a>
-        </div>
-
-    </div>
-</div>
 
 <%--<div>--%>
 <div class="weui-mask" id="iosMask" style="display: none">
