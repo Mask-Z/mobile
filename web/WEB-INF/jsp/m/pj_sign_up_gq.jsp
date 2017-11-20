@@ -111,25 +111,13 @@
 
         function init() {
             if ($("#zhuanRang_type").val() == '1') {
-                $("#shouRang_gufen_div").hide();
-                $("#shou_RangGuFen").hide();
+                $("#td_gf1").hide();
+                $("#td_gf2").hide();
+                $("#input_gf").textbox({required:false});
             } else {
-                $("#shouRang_percent_div").hide();
-                $("#shou_RangPercent").hide();
-            }
-
-            if ($("#lbl_isManagerLayer").val() == '1') {
-                $("#zhiwu_div").show();
-                $("#shenji").show();
-            }
-
-            if ($("#jinQi_ziChan").val() == '0;1;') {
-                $("#s90").attr("checked", true);
-                $("#s100").attr("checked", true);
-            } else if ($("#jinQi_ziChan").val() == '0;') {
-                $("#s90").attr("checked", true);
-            } else if ($("#jinQi_ziChan").val() == '1;') {
-                $("#s100").attr("checked", true);
+                $("#td_bl1").hide();
+                $("#td_bl2").hide();
+                $("#input_bl").textbox({required:false});
             }
         }
 
@@ -479,64 +467,31 @@
         });
 
         //新增/修改联合受让方保存
-        $("#btn_ok").click(function () {
-            var flag = true;
-
-            if (zhuanRangType == "1" && $("#shouRang_percent").val() > 100) {
-                $("#union_js_tooltips").html("受让比例请输入不大于100的值");
-                flag = false;
-            }
-
-            if (zhuanRangType == "1" && $("#shouRang_percent").val() == "") {
-                $("#union_js_tooltips").html("受让比例必填");
-                flag = false;
-            }
-            if (zhuanRangType == "2" && $("#shouRang_gufen").val() == "") {
-                $("#union_js_tooltips").html("受让股份必填");
-                flag = false;
-            }
-            if ($.trim($("#shouRang_name").val()) == "") {
-                $("#union_js_tooltips").html("受让方名称必填");
-                flag = false;
-            }
-            if (!flag) {
-                $("#union_js_tooltips").css('display', 'block');
-                setTimeout(function () {
-                    $("#union_js_tooltips").css('display', 'none');
-                }, 2000);
-                return false;
-            }
-            var param = $("#pj_gq_addUnion").serialize();
-            $.ajax({
-                type: "POST",
-                url: "pj_gq_addUnion_submit",
-                dataType: "json",
-                data: param,
-                success: function (result) {
-                    if (result) {
-                        if (result.code == 0) {
-                            $("#toast_div").text("操作成功");
-                            $('#loadingToast').fadeIn(100);
-                            setUnionDiv($("#union_baoMing_guid").val());
-                        } else {
-                            $("#toast_div").text("操作失败");
-                            $('#loadingToast').fadeIn(100);
+        $("#editsave").click(function () {
+            if($("#addLHSR").form('validate')) {
+//                $("#addLHSR").submit();
+                var param = $("#addLHSR").serialize();
+                $.ajax({
+                    type: "POST",
+                    url: "pj_gq_addUnion_submit",
+                    dataType: "json",
+                    data: param,
+                    success: function (result) {
+                        if (result) {
+                            if (result.code == 0) {
+                                alert(result.msg);
+                                setUnionDiv($("#union_baoMing_guid").val());
+                            } else {
+                                alert(result.msg);
+                            }
                         }
-                        $('#loadingToast').fadeOut(100);
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("error: "+errorThrown);
                     }
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert(errorThrown);
-                }
-            });
-            $("#union_select_div").fadeOut(200);
-            $("#pj_gq_submit").show();
-        });
-
-        //新增/修改联合受让方取消
-        $("#btn_cancel").on("click", function () {
-            $("#union_select_div").fadeOut(200);
-            $("#pj_gq_submit").show();
+                });
+                $("#dlg_lhsr").dialog('close');
+            }
         });
 
         //动态展示当前报名的所有联合受让方
@@ -553,35 +508,38 @@
                         } else {
                             $("#is_unionShouRang").val("0");
                         }
-                        $("#union_div").empty();
+                        $("#union_table").empty();
                         var innerHtml = "";
-                        innerHtml += ' <table class="table" width="100%"> <tbody> <tr>' +
-                            '<td height="50" width="70" align="center">序号</td> <td>联合受让方名称</td>';
+                        innerHtml += ' <tbody> <tr>' +
+                            '<td  width="10%" align="center" class="title">序号</td> <td class="title" width="30%" align="center">联合受让方名称</td>';
 
                         if (zhuanRangType == "1") {
-                            innerHtml += ' <td align="center"  width="120">拟受让比例（%）</td></tr>';
+                            innerHtml += ' <td align="center"  width="30%" class="title">拟受让比例（%）</td>';
 
                         } else if (zhuanRangType == "2") {
-                            innerHtml += ' <td align="center"  width="120">拟受让股份（股）</td></tr>';
+                            innerHtml += ' <td align="center"  width="30%" class="title">拟受让股份（股）</td>';
 
                         }
-//       	            $("#union_div").append(innerHead);
+                        innerHtml +='<td class="title" width="10%" align="center">查看</td><td class="title" width="10%" align="center">修改</td><td class="title" width="10%" align="center">删除</td></tr>';
                         $.each(result, function (i, data) {
 //       	                var innerHtml = "";
                             if (zhuanRangType == "1") {
-                                innerHtml += ' <tr class="ios_menu"> <td height="30" align="center" >' + (i + 1) + '</td>' +
-                                    '<td>' + data.ShouRangName + '</td>' +
-                                    '<td class="zhuanRang_value" align="center">' + data.ShouRangPercent + '</td></tr>' +
+                                innerHtml += ' <tr> <td  align="center" >' + (i + 1) + '</td>' +
+                                    '<td align="center">' + data.ShouRangName + '</td>' +
+                                    '<td align="center">' + data.ShouRangPercent + '</td>' +
+                                    '<td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" >查看</a></td><td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" >修改</a></td><td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" >删除</a></td>' +
+                                    '</tr>' +
                                     "<input type='hidden' value='" + data.RowGuid + "'>";
                             } else if (zhuanRangType == "2") {
-                                innerHtml += ' <tr class="ios_menu"> <td height="30" align="center" >' + (i + 1) + '</td>' +
-                                    '<td>' + data.ShouRangName + '</td>' +
-                                    '<td class="zhuanRang_value" align="center">' + data.ShouRangGufen + '</td></tr>' +
+                                innerHtml += ' <tr> <td align="center" >' + (i + 1) + '</td>' +
+                                    '<td align="center">' + data.ShouRangName + '</td>' +
+                                    '<td align="center">' + data.ShouRangGufen + '</td>' +
+                                    '<td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" >查看</a></td><td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" >修改</a></td><td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" >删除</a></td>' +
+                                    '</tr>' +
                                     "<input type='hidden' value='" + data.RowGuid + "'> ";
                             }
-//       	                $("#union_div").append(innerHtml);
                         });
-                        $("#union_div").append(innerHtml + "</tbody> </table>");
+                        $("#union_table").append(innerHtml + "</tbody>");
 
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -795,7 +753,8 @@
         <div class="title">
             <a id="btn_save" class="easyui-linkbutton c1" style="width:80px" >下一步</a>
             <%--<a  class="easyui-linkbutton c2" style="width:120px">新增联合受让方</a>--%>
-            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#dlg_lhsr').dialog('open')">新增联合受让方</a>
+            <%--<a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#dlg_lhsr').dialog('open')">新增联合受让方</a>--%>
+            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="addUnion()">新增联合受让方</a>
             项目报名</div>
         <a href="javascript:showRule1();" class="h-r"><i class="glyphicon glyphicon-filter"></i></a>
     </div>
@@ -818,7 +777,7 @@
 
 <div id="dlg_lhsr" class="easyui-dialog" title="新增联合受让方" data-options="iconCls:'icon-save',closed:true" style="width:800px;height:600px;padding:10px">
     <div>
-        <a href="javascript:void(0)" class="easyui-linkbutton" >修改保存</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" id="editsave" >修改保存</a>
         <span style="float: right"><font color="red">注意:信息录入完成后,请务必要点击左侧的[修改保存]按钮!</font></span>
     </div>
     <form id="addLHSR">
@@ -840,15 +799,15 @@
                         </td>
                         <td class="title">受让方类型</td>
                         <td colspan="2">
-                            <input type="radio" value="1" name="info['shouRangRenType']" >法人
+                            <input type="radio" value="1" name="info['shouRangRenType']" checked>法人
                             <input type="radio" value="2" name="info['shouRangRenType']" >自然人
                         </td>
                     </tr>
                     <tr>
-                        <td class="title">受让比例(%)<font color="red">(*)</font></td>
-                        <td colspan="2"> <input class="easyui-textbox" type="text" name="info['shouRangPercent']" style="width: 90%" data-options="required:true"/>%</td>
-                        <td class="title" style="display: none">受让股份(股)<font color="red">(*)</font></td>
-                        <td colspan="2" style="display: none"> <input class="easyui-textbox" style="width: 100%" type="text" name="info['shouRangGuFen']" data-options="required:true"/></td>
+                        <td class="title"  id="td_bl1">受让比例(%)<font color="red">(*)</font></td>
+                        <td colspan="2" id="td_bl2"> <input class="easyui-textbox" type="text" id="input_bl" name="info['shouRangPercent']" style="width: 90%" data-options="required:true"/>%</td>
+                        <td class="title"  id="td_gf1">受让股份(股)<font color="red">(*)</font></td>
+                        <td colspan="2"  id="td_gf2"> <input class="easyui-textbox" style="width: 100%" id="input_gf" type="text" name="info['shouRangGuFen']" data-options="required:true"/></td>
                         <td class="title"></td>
                         <td colspan="2"></td>
                     </tr>
@@ -940,6 +899,11 @@
         }
         $('#srfmc').textbox('setValue',DanWeiName);
         $("#dlg_js").dialog('close');
+    }
+
+    function addUnion() {
+        $("#union_type").val("union_add");
+        $("#dlg_lhsr").dialog('open');
     }
 
 </script>
@@ -1590,17 +1554,20 @@
         </form>
     </div>
     <br>
-    <table  width="100%" border="1px">
+    <table  width="100%" border="1px" id="union_table">
         <tbody>
         <tr>
             <td  width="10%" align="center" class="title">序号</td>
-            <td class="title" width="45%" align="center">联合受让方名称</td>
+            <td class="title" width="30%" align="center">联合受让方名称</td>
             <c:if test="${data.ZhuanRangType=='1'}">
-                <td align="center"  width="45%" class="title">拟受让比例（%）</td>
+                <td align="center"  width="30%" class="title">拟受让比例（%）</td>
             </c:if>
             <c:if test="${data.ZhuanRangType=='2'}">
-                <td align="center"  width="45%" class="title">拟受让股份（股）</td>
+                <td align="center"  width="30%" class="title">拟受让股份（股）</td>
             </c:if>
+            <td class="title" width="10%" align="center">查看</td>
+            <td class="title" width="10%" align="center">修改</td>
+            <td class="title" width="10%" align="center">删除</td>
         </tr>
         <c:forEach items="${data.unionList}" var="union" varStatus="vs">
             <tr>
@@ -1612,6 +1579,10 @@
                 <c:if test="${data.ZhuanRangType=='2'}">
                     <td align="center">${union.ShouRangGufen }</td>
                 </c:if>
+
+                <td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" >查看</a></td>
+                <td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" >修改</a></td>
+                <td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" >删除</a></td>
             </tr>
             <input type="hidden" value="${union.RowGuid}">
         </c:forEach>
