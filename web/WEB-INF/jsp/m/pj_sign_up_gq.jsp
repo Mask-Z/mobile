@@ -102,9 +102,6 @@
         addEndTime();
         setInterval(addEndTime, 1000);
 
-        //设置搜索结果高度
-        var dHeight = document.documentElement ? document.documentElement.clientHeight : document.body.clientHeight;//浏览器高度
-        $("#searchResult").height(dHeight - 120);
 
         var zhuanRangType = "${data.ZhuanRangType }";
         var faRenType = "${data.FaRenType }";
@@ -114,10 +111,12 @@
                 $("#td_gf1").hide();
                 $("#td_gf2").hide();
                 $("#input_gf").textbox({required:false});
+                $("#shou_RangGuFen").hide();
             } else {
                 $("#td_bl1").hide();
                 $("#td_bl2").hide();
                 $("#input_bl").textbox({required:false});
+                $("#shou_RangPercent").hide();
             }
         }
 
@@ -139,9 +138,8 @@
             $iosMask.fadeIn(200);
         });
 
-        $("#union_delete").on("click", function () {
-            hideActionSheet();
-            var rowGuid = $("#union_waiting_handle").val();
+        $( document ).on( "click", "#union_delete", function() {
+            var rowGuid = $(this).attr("guid");
             $.ajax({
                 type: "POST",
                 url: "pj_gq_delUnion",
@@ -150,33 +148,31 @@
                 success: function (result) {
                     if (result) {
                         if (result.code == 0) {
-                            $("#toast_div").text("删除成功");
-                            $('#loadingToast').fadeIn(100);
+                           alert("删除成功");
                             setUnionDiv($("#union_baoMing_guid").val());
                         } else {
-                            $("#toast_div").text("删除失败");
-                            $('#loadingToast').fadeIn(100);
+                            alert("删除失败");
                         }
-                        $('#loadingToast').fadeOut(100);
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert(errorThrown);
+                    alert("error"+errorThrown);
                 }
             });
         });
+        $( document ).on( "click", "#union_view", function() {
+            var rowGuid = $(this).attr("guid");
+            initUnionDialog("union_view",rowGuid);
 
-        $("#union_view").on("click", function () {
-            initUnionDialog("union_view");
+        });
+        $( document ).on( "click", "#union_edit", function() {
+            var rowGuid = $(this).attr("guid");
+            initUnionDialog("union_edit",rowGuid);
+
         });
 
-        $("#union_edit").on("click", function () {
-            initUnionDialog("union_edit");
-        });
 
-        function initUnionDialog(type) {
-            hideActionSheet();
-            var rowGuid = $("#union_waiting_handle").val();
+        function initUnionDialog(type,rowGuid) {
             $.ajax({
                 type: "POST",
                 url: "pj_gq_getUnion",
@@ -184,38 +180,42 @@
                 data: "rowGuid=" + rowGuid,
                 success: function (result) {
                     if (result) {
-                        $("#shouRang_name").val(result.ShouRangName);
-                        $("#shouRangRen_type").val(result.ShouRangRenType);
-                        $("#shouRang_percent").val(result.ShouRangPercent);
-                        $("#shouRang_gufen").val(result.ShouRangGuFen);
-                        $("#lianXi_name").val(result.LianXiName);
-                        $("#lianXi_tel").val(result.LianXiTel);
-                        $("#lianXi_email").val(result.LianXiEmail);
-                        $("#lianXi_fax").val(result.LianXiFax);
-                        $("#weiTuoDW_name").val(result.WeiTuoDWName);
-                        $("#weiTuoDW_lianXiTel").val(result.WeiTuoDWLianXiTel);
-                        $("#weiTuoHY_heShi").val(result.WeiTuoHYHeShi);
-                        $("#weiTuoHY_No").val(result.WeiTuoHYNo);
-                        $("#weiTuoHY_name").val(result.WeiTuoHYName);
-                        $("#weiTuoHY_code").val(result.WeiTuoHYCode);
-                        $("#weiTuoHY_lianXiName").val(result.WeiTuoHYLianXiName);
+                        $('#srfmc').textbox('setValue',result.ShouRangName);
+                        $("#input_bl").textbox('setValue',result.ShouRangPercent);
+                        $("#input_gf").textbox('setValue',result.ShouRangGuFen);
+                        $("#lianXi_name").textbox('setValue',result.LianXiName);
+                        $("#lianXi_tel").textbox('setValue',result.LianXiTel);
+                        $("#lianXi_email").textbox('setValue',result.LianXiEmail);
+                        $("#lianXi_fax").textbox('setValue',result.LianXiFax);
+                        $("#weiTuoDW_name").textbox('setValue',result.WeiTuoDWName);
+                        $("#weiTuoDW_lianXiTel").textbox('setValue',result.WeiTuoDWLianXiTel);
+                        $("#weiTuoHY_heShi").textbox('setValue',result.WeiTuoHYHeShi);
+                        $("#weiTuoHY_No").textbox('setValue',result.WeiTuoHYNo);
+                        $("#weiTuoHY_name").textbox('setValue',result.WeiTuoHYName);
+                        $("#weiTuoHY_code").textbox('setValue',result.WeiTuoHYCode);
+                        $("#weiTuoHY_lianXiName").textbox('setValue',result.WeiTuoHYLianXiName);
+
+
                         if (type == "union_view") {
                             //查看时禁用所有输入并隐藏确定按钮
-                            $("#union_select_div").find("*").each(function () {
+                            $("#dlg_lhsr").find("*").each(function () {
                                 $(this).attr("disabled", "disabled");
                             });
-                            $("#btn_ok").hide();
+                            $("#dlg_div").hide();
+                            $("#button_js").hide();
+                            $("#dlg_lhsr").dialog('open');
                         }
                         if (type == "union_edit") {
                             $("#union_row_guid").val(rowGuid);
                             //修改时启用所有输入并显示确定按钮
-                            $("#union_select_div").find("*").each(function () {
+                            $("#dlg_lhsr").find("*").each(function () {
                                 $(this).removeAttr("disabled");
                             });
-                            $("#btn_ok").show();
                             $("#union_type").val("union_edit");
+                            $("#dlg_div").show();
+                            $("#button_js").show();
+                            $("#dlg_lhsr").dialog('open');
                         }
-                        $("#union_select_div").fadeIn(200);
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -240,7 +240,10 @@
 
         //保存报名信息
         $("#btn_save").click(function () {
-            if ($("#srf_js_tooltips").css('display') != 'none') return false;
+//            if ($("#srf_js_tooltips").css('display') != 'none') {
+//                console.log($("#srf_js_tooltips").css('display'));
+//                return false;
+//            }
 
 
             var flag = true;
@@ -298,9 +301,6 @@
 
             }
 
-            //if(!isNan(zhuanRang_value)){
-            //	zhuanRang_value = 0;
-            //}
             if (parseFloat(zhuanRangValue) != zhuanRang_value) {
                 if (zhuanRangType == "1") {
                     $("#srf_js_tooltips").html("受让方受让（联合受让）的比例(" + zhuanRang_value.toFixed(4) + "%)应该等于转让方转让（联合转让）的比例(" + zhuanRangValue + "%)");
@@ -370,14 +370,13 @@
 
 
             if (!flag) {
-                $("#srf_js_tooltips").css('display', 'block');
-                setTimeout(function () {
-                    $("#srf_js_tooltips").css('display', 'none');
-                }, 3000);
+//                $("#srf_js_tooltips").css('display', 'block');
+//                setTimeout(function () {
+//                    $("#srf_js_tooltips").css('display', 'none');
+//                }, 3000);
                 alert( $("#srf_js_tooltips").text());
                 return false;
             }
-
             var param = $("#pj_gq_submit").serialize();
 
             $.ajax({
@@ -388,39 +387,17 @@
                 success: function (result) {
                     if (result) {
                         if (result.code == 0) {
-                            $("#toast_div").text("数据提交中");
-                            $('#loadingToast').fadeIn(100);
                             location.href = "pj_sign_up_view?infoid=${ProjectGuid}&type=GQ&bmguid=${data.RowGuid }&zhuanRangType=" + zhuanRangType;
                         } else if (result.code = -2) {
-                            $("#srf_js_tooltips").html(result.msg);
-//       	    		    $("#toast_div").text(result.msg);
-                            $("#srf_js_tooltips").css('display', 'block');
-                            setTimeout(function () {
-                                $("#srf_js_tooltips").css('display', 'none');
-                            }, 3000);
-//       	    		    $('#loadingToast').fadeIn(100);
+                            alert(result.msg);
                         }
                         $('#loadingToast').fadeOut(100);
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert(errorThrown);
+                    alert("error: "+errorThrown);
                 }
             });
-        });
-
-        //新增联合受让方
-        $("#btn_add").on("click", function () {
-            //重置表单数据
-            document.getElementById("pj_gq_addUnion").reset();
-            //新增时启用所有输入并显示确定按钮
-            $("#union_select_div").find("*").each(function () {
-                $(this).removeAttr("disabled");
-            });
-            $("#btn_ok").show();
-            $("#union_type").val("union_add");
-            $("#union_select_div").fadeIn(200);
-            $("#pj_gq_submit").hide();
         });
 
         $("#is_managerLayer").change(function () {
@@ -450,13 +427,8 @@
                 if ($(this).is(':checked')) {
                     $("#shouRang_name").val($.trim($(this).next().next().next().val()));
                     $("#shouRang_guid").val($.trim($(this).next().next().val()));
-//            }else{
-//                $("#shouRang_name").val('');
                 }
             });
-//        if ($.trim($("#shouRang_name").val()) == ''){
-//            $("#shouRang_name").val($("#searchInput").val());
-//        }
             $("#srf_select_div").fadeOut(200);
             $("#pj_gq_submit").show();
         });
@@ -469,7 +441,6 @@
         //新增/修改联合受让方保存
         $("#editsave").click(function () {
             if($("#addLHSR").form('validate')) {
-//                $("#addLHSR").submit();
                 var param = $("#addLHSR").serialize();
                 $.ajax({
                     type: "POST",
@@ -526,15 +497,15 @@
                             if (zhuanRangType == "1") {
                                 innerHtml += ' <tr> <td  align="center" >' + (i + 1) + '</td>' +
                                     '<td align="center">' + data.ShouRangName + '</td>' +
-                                    '<td align="center">' + data.ShouRangPercent + '</td>' +
-                                    '<td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" >查看</a></td><td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" >修改</a></td><td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" >删除</a></td>' +
+                                    '<td align="center" class="zhuanRang_value">' + data.ShouRangPercent + '</td>' +
+                                    '<td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" id="union_view" guid="'+data.RowGuid +'">查看</a></td><td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" id="union_edit" guid="'+data.RowGuid +'">修改</a></td><td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" guid="'+data.RowGuid +'" id="union_delete">删除</a></td>' +
                                     '</tr>' +
                                     "<input type='hidden' value='" + data.RowGuid + "'>";
                             } else if (zhuanRangType == "2") {
                                 innerHtml += ' <tr> <td align="center" >' + (i + 1) + '</td>' +
                                     '<td align="center">' + data.ShouRangName + '</td>' +
-                                    '<td align="center">' + data.ShouRangGufen + '</td>' +
-                                    '<td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" >查看</a></td><td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" >修改</a></td><td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" >删除</a></td>' +
+                                    '<td align="center" class="zhuanRang_value">' + data.ShouRangGufen + '</td>' +
+                                    '<td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" id="union_view" guid="'+data.RowGuid +'">查看</a></td><td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" id="union_edit" guid="'+data.RowGuid +'">修改</a></td><td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" guid="'+data.RowGuid +'" id="union_delete">删除</a></td>' +
                                     '</tr>' +
                                     "<input type='hidden' value='" + data.RowGuid + "'> ";
                             }
@@ -729,18 +700,22 @@
         }
         $("#managerLayer_geren").change(function() {
             if($("#managerLayer_geren").is(':checked')){
+                    $("#managerLayer_geren_input").val("1");
                     $("#row_geren").attr("rowspan","7");
                     $("#zhiwu_div").show();
             }else{
+                $("#managerLayer_geren_input").val("0");
                 $("#row_geren").attr("rowspan","6");
                 $("#zhiwu_div").hide();
             }
         });
         $("#managerLayer_danwei").change(function() {
             if($("#managerLayer_danwei").is(':checked')){
+                $("#managerLayer_danwei_input").val("1");
                 $("#row_danwei").attr("rowspan","12");
                 $("#zhiwu_div").show();
             }else{
+                $("#managerLayer_danwei_input").val("0");
                 $("#row_danwei").attr("rowspan","11");
                 $("#zhiwu_div").hide();
             }
@@ -774,9 +749,9 @@
 
 </style>
 <div style="margin:5px 0;"></div>
-
+<div class="weui-toptips weui-toptips_warn js_tooltips" style="top: 43px;display: none" id="srf_js_tooltips"></div>
 <div id="dlg_lhsr" class="easyui-dialog" title="新增联合受让方" data-options="iconCls:'icon-save',closed:true" style="width:800px;height:600px;padding:10px">
-    <div>
+    <div id="dlg_div">
         <a href="javascript:void(0)" class="easyui-linkbutton" id="editsave" >修改保存</a>
         <span style="float: right"><font color="red">注意:信息录入完成后,请务必要点击左侧的[修改保存]按钮!</font></span>
     </div>
@@ -795,7 +770,7 @@
                         <td class="title">受让方名称<font color="red">(*)</font></td>
                         <td colspan="2">
                             <input class="easyui-textbox" type="text" style="width: 80%" id="srfmc" name="info['shouRangName']"  data-options="required:true" readonly/>
-                            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#dlg_js').dialog('open')">检索</a>
+                            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#dlg_js').dialog('open')" id="button_js">检索</a>
                         </td>
                         <td class="title">受让方类型</td>
                         <td colspan="2">
@@ -813,40 +788,40 @@
                     </tr>
                     <tr>
                         <td class="title">联系人姓名</td>
-                        <td colspan="2"> <input class="easyui-textbox" type="text" name="info['lianXiName']" style="width: 100%"/></td>
+                        <td colspan="2"> <input id="lianXi_name" class="easyui-textbox" type="text" name="info['lianXiName']" style="width: 100%"/></td>
                         <td class="title">联系人电话</td>
-                        <td colspan="2"><input class="easyui-textbox" type="text" name="info['lianXiTel']" style="width: 100%"/></td>
+                        <td colspan="2"><input id="lianXi_tel" class="easyui-textbox" type="text" name="info['lianXiTel']" style="width: 100%"/></td>
                     </tr>
                     <tr>
                         <td class="title">联系人邮件</td>
-                        <td colspan="2"><input class="easyui-textbox" type="text" name="info['lianXiEmail']" style="width: 100%"/></td>
+                        <td colspan="2"><input id="lianXi_email" class="easyui-textbox" type="text" name="info['lianXiEmail']" style="width: 100%"/></td>
                         <td class="title">联系人传真</td>
-                        <td colspan="2"><input class="easyui-textbox" type="text" name="info['lianXiFax']" style="width: 100%"/></td>
+                        <td colspan="2"><input id="lianXi_fax" class="easyui-textbox" type="text" name="info['lianXiFax']" style="width: 100%"/></td>
                     </tr>
                     <tr>
                         <td class="title">委托会员单位名称</td>
-                        <td colspan="2"><input class="easyui-textbox" type="text" name="info['weiTuoDWName']" style="width: 100%"/></td>
+                        <td colspan="2"><input id="weiTuoDW_name" class="easyui-textbox" type="text" name="info['weiTuoDWName']" style="width: 100%"/></td>
                         <td class="title">委托会员联系人电话</td>
-                        <td colspan="2"><input class="easyui-textbox" type="text" name="info['weiTuoDWLianXiTel']" style="width: 100%"/></td>
+                        <td colspan="2"><input id="weiTuoDW_lianXiTel" class="easyui-textbox" type="text" name="info['weiTuoDWLianXiTel']" style="width: 100%"/></td>
                     </tr>
                     <tr>
                         <td class="title">委托会员核实意见</td>
                         <td colspan="4">
-                            <input class="easyui-textbox" style="height:80px;width: 100%" data-options="multiline:true"
+                            <input id="weiTuoHY_heShi" class="easyui-textbox" style="height:80px;width: 100%" data-options="multiline:true"
                                    name="info['weiTuoHYHeShi']" >
                         </td>
                     </tr>
                     <tr>
                         <td class="title">委托会员工位号</td>
-                        <td colspan="2"><input class="easyui-textbox" type="text" name="info['weiTuoHYNo']" style="width: 100%"/></td>
+                        <td colspan="2"><input id="weiTuoHY_No" class="easyui-textbox" type="text" name="info['weiTuoHYNo']" style="width: 100%"/></td>
                         <td class="title">委托会员经纪人</td>
-                        <td colspan="2"><input class="easyui-textbox" type="text" name="info['weiTuoHYName']" style="width: 100%"/></td>
+                        <td colspan="2"><input id="weiTuoHY_name" class="easyui-textbox" type="text" name="info['weiTuoHYName']" style="width: 100%"/></td>
                     </tr>
                     <tr>
                         <td class="title">委托会员经纪人编码</td>
-                        <td colspan="2"><input class="easyui-textbox" type="text" name="info['weiTuoHYCode']" style="width: 100%"/></td>
+                        <td colspan="2"><input id="weiTuoHY_code" class="easyui-textbox" type="text" name="info['weiTuoHYCode']" style="width: 100%"/></td>
                         <td class="title">委托会员联系人</td>
-                        <td colspan="2"><input class="easyui-textbox" type="text" name="info['weiTuoHYLianXiName']" style="width: 100%"/></td>
+                        <td colspan="2"><input id="weiTuoHY_lianXiName" class="easyui-textbox" type="text" name="info['weiTuoHYLianXiName']" style="width: 100%"/></td>
                     </tr>
                     </thead>
                 </table>
@@ -903,6 +878,11 @@
 
     function addUnion() {
         $("#union_type").val("union_add");
+        $("#dlg_lhsr").find("*").each(function () {
+            $(this).removeAttr("disabled");
+        });
+        $("#dlg_div").show();
+        $("#button_js").show();
         $("#dlg_lhsr").dialog('open');
     }
 
@@ -1182,7 +1162,8 @@
     <input type="hidden" name="info['JinQiZiChan']" id="jinQi_ziChan" value="${data.JinQiZiChan}">
 
 
-    <table class="myform" title="报名详情" style="width:100%;height:250px" border="1">
+    <%--<table class="myform" title="报名详情" style="width:100%;height:250px" border="1">--%>
+    <table class="myform" style="height:250px;" width="100%" table-layout="fixed" border="1" bordercolor="#ddd">
         <thead>
         <tr>
             <td class="title">标的编号</td>
@@ -1237,10 +1218,12 @@
                 <td colspan="1" id="area">${data.AreaName }</td>
             </tr>
             <tr>
-                <td colspan="5"><input name="info['IsManagerLayer']" type="checkbox" id="managerLayer_danwei"
-                                       <c:if test="${data.IsManagerLayer=='1'}">checked</c:if>>标的企业管理层直接或间接出资
+                <td colspan="5"><input  type="checkbox" id="managerLayer_danwei"
+                                       <c:if test="${data.IsManagerLayer=='1'}">checked </c:if>
+                                       >标的企业管理层直接或间接出资
                 </td>
             </tr>
+            <input type="hidden" name="info['IsManagerLayer']" id="managerLayer_danwei_input" value="${data.IsManagerLayer}">
             <tr id="zhiwu_div" style="display: none;">
                 <td class="title">职务<font color="red">(*)</font></td>
                 <td colspan="2">
@@ -1399,10 +1382,12 @@
             </tr>
 
             <tr>
-                <td colspan="5"><input name="info['IsManagerLayer']" type="checkbox" id="managerLayer_geren"
-                                       <c:if test="${data.IsManagerLayer=='1'}">checked</c:if>>标的企业管理层直接或间接出资
+                <td colspan="5"><input  type="checkbox" id="managerLayer_geren"
+                                       <c:if test="${data.IsManagerLayer=='1'}">checked</c:if>
+                                        >标的企业管理层直接或间接出资
                 </td>
             </tr>
+            <input type="hidden" name="info['IsManagerLayer']" id="managerLayer_geren_input" value="${data.IsManagerLayer}">
             <tr id="zhiwu_div" style="display: none;">
                 <td class="title">职务<font color="red">(*)</font></td>
                 <td colspan="2">
@@ -1450,7 +1435,7 @@
                         value="1"/>是
                 <input
                         <c:if test="${data.hasPriority=='0'}">checked</c:if> type="radio" name="info['hasPriority']"
-                        value="0"/>否${data.hasPriority}
+                        value="0"/>否
             </td>
         </tr>
         <tr>
@@ -1465,7 +1450,7 @@
                     </c:forEach></select>
                 ;<span id="shou_RangPercent">拟受让比例<input type="easyui-textbox" name="info['ShouRangPercent']" id="srf_srp" data-options="required:true"
                                                          value="${data.ShouRangPercent }">%</span>
-                <span id="shou_RangGuFen">拟受让比例<input type="easyui-textbox" name="info['ShouRangGuFen']" id="srf_srgf" data-options="required:true"
+                <span id="shou_RangGuFen">;拟受让股份(股)<input type="easyui-textbox" name="info['ShouRangGuFen']" id="srf_srgf" data-options="required:true"
                                                       value="${data.ShouRangGuFen }"></span>
             </td>
         </tr>
@@ -1574,15 +1559,15 @@
                 <td  align="center">${vs.index+1 }</td>
                 <td align="center">${union.ShouRangName}</td>
                 <c:if test="${data.ZhuanRangType=='1'}">
-                    <td  align="center">${union.ShouRangPercent }</td>
+                    <td class="zhuanRang_value" align="center">${union.ShouRangPercent }</td>
                 </c:if>
                 <c:if test="${data.ZhuanRangType=='2'}">
-                    <td align="center">${union.ShouRangGufen }</td>
+                    <td class="zhuanRang_value" align="center">${union.ShouRangGufen }</td>
                 </c:if>
 
-                <td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" >查看</a></td>
-                <td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" >修改</a></td>
-                <td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" >删除</a></td>
+                <td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" guid="${union.RowGuid}" id="union_view">查看</a></td>
+                <td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" guid="${union.RowGuid}" id="union_edit">修改</a></td>
+                <td align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" guid="${union.RowGuid}" id="union_delete">删除</a></td>
             </tr>
             <input type="hidden" value="${union.RowGuid}">
         </c:forEach>
@@ -1591,92 +1576,6 @@
     <div style="height: 80px"></div>
 </form>
 
-
-<!--竞买人查询dialog start-->
-<div class="js_dialog" id="srf_select_div" style="display: none;">
-    <div class="weui-dialog_srf" id="autodiv">
-        <div class="weui-dialog__bd" style="padding:0px;">
-            <div class="weui-search-bar" id="searchBar">
-                <select id="choose_srf" class="form-control input input-sm">
-                    <option value="0">竞买方</option>
-                    <option value="1">组织机构代码</option>
-                </select>
-                <form class="weui-search-bar__form">
-                    <div class="weui-search-bar__box">
-                        <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="输入竞买方名称搜索"
-                               required="">
-                    </div>
-                    <label class="weui-search-bar__label" id="searchText"
-                           style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);line-height:25px;">
-                        <i class="weui-icon-search"></i>
-                        <span>搜索</span>
-                    </label>
-                </form>
-            </div>
-            <div class="weui-cells searchbar-result weui-cells_radio" id="searchResult"
-                 style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1); display: none;overflow-y: scroll">
-
-            </div>
-        </div>
-        <div class="weui-btn-area">
-            <a class="weui-btn weui-btn_default" href="javascript:" id="srf_sel_cancel">取消</a>
-            <a class="weui-btn weui-btn_primary" href="javascript:" id="srf_sel_ok">确定</a>
-        </div>
-    </div>
-</div>
-<!--竞买人查询dialog end-->
-
-<div class="js_dialog" id="hyjg_select_div" style="display: none;height: 400px;">
-    <div class="weui-mask"></div>
-    <div class="weui-dialog">
-        <div class="weui-dialog__hd" style="height: 30px"><strong class="weui-dialog__title">机构名称</strong></div>
-        <div class="weui-dialog__bd" style="height: 400px;overflow-y:scroll;">
-            <div class="weui-cells weui-cells_radio">
-                <c:forEach items="${sshyjg }" var="hyjg" varStatus="jg">
-                    <label class="weui-cell weui-check__label" for="x${jg.index }"
-                           style="text-align: left;font-size: 14px">
-                        <div class="weui-cell__bd">
-                            <p>${hyjg.name }</p>
-                        </div>
-                        <div class="weui-cell__ft">
-                            <input type="radio" class="weui-check" hyname="${hyjg.name }" value="${hyjg.guid }"
-                                   name="sshyjg" id="x${jg.index }">
-                            <span class="weui-icon-checked"></span>
-                        </div>
-                    </label>
-                </c:forEach>
-            </div>
-        </div>
-        <div class="weui-dialog__ft">
-            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" id="hyjg_sel_ok">确定</a>
-        </div>
-    </div>
-</div>
-
-
-
-<%--<div>--%>
-<div class="weui-mask" id="iosMask" style="display: none">
-    <div class="weui-actionsheet" id="iosActionsheet">
-        <div class="weui-actionsheet__menu">
-            <div class="weui-actionsheet__cell" id="union_view">查看</div>
-            <div class="weui-actionsheet__cell" id="union_edit">修改</div>
-            <div class="weui-actionsheet__cell" id="union_delete">删除</div>
-        </div>
-        <div class="weui-actionsheet__action">
-            <div class="weui-actionsheet__cell" id="iosActionsheetCancel">取消</div>
-        </div>
-    </div>
-</div>
-
-<!-- loading -->
-<div id="loadingToast" style="display:none;">
-    <div class="weui-mask_transparent"></div>
-    <div class="weui-toast">
-        <i class="weui-loading weui-icon_toast"></i>
-        <p class="weui-toast__content" id="toast_div">数据加载中</p>
-    </div>
-</div>
 
 </body>
 </html>
